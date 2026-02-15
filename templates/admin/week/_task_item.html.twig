@@ -1,0 +1,21 @@
+<div class="border rounded p-2 flex justify-between items-start {{ task.status == 'DONE' ? 'bg-green-50 opacity-75' : 'bg-white' }}">
+    <div>
+        <div class="text-sm font-medium {{ task.status == 'DONE' ? 'line-through text-gray-500' : 'text-gray-900' }}">
+            {{ task.nameSnapshot }}
+        </div>
+        <div class="text-xs text-gray-500 flex gap-1">
+            <span class="font-bold">{{ task.pointsSnapshot }} pkt</span>
+            {% if task.prioritySnapshot == 'URGENT' %}
+                <span class="text-red-600 font-bold">PILNE</span>
+            {% endif %}
+            {% if show_week|default(false) %}
+                <span>(Tydz {{ task.week.weekNumber }})</span>
+            {% endif %}
+        </div>
+    </div>
+    <button class="task-toggle-btn text-xs px-2 py-1 rounded border {{ task.status == 'DONE' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-green-100 hover:bg-green-200 text-green-800' }}"
+            data-task-id="{{ task.id }}"
+            data-status="{{ task.status }}">
+        {{ task.status == 'DONE' ? 'Cofnij' : 'Gotowe' }}
+    </button>
+</div>

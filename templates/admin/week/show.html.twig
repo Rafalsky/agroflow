@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tydzień {{ week.weekNumber }}/{{ week.year }}{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8" id="week-view" 
+     data-done-url-pattern="{{ path('admin_week_task_done', {'id': 'TASK_ID'}) }}"
+     data-undo-url-pattern="{{ path('admin_week_task_undo', {'id': 'TASK_ID'}) }}">
+    
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold">Tydzień {{ week.weekNumber }} / {{ week.year }}</h1>
+            <span class="text-gray-500">Status: {{ week.status }}</span>
+        </div>
+        <div class="space-x-2">
+            <form method="post" action="{{ path('admin_week_generate', {'year': week.year, 'week': week.weekNumber}) }}" class="inline">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Generuj Zadania</button>
+            </form>
+             <a href="{{ path('admin_task_template_index') }}" class="text-indigo-600 hover:text-indigo-900 px-4">Szablony</a>
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+        </div>
+    {% endfor %}
+
+    <!-- PENDING TASKS FROM PAST -->
+    {% if pending_tasks|length > 0 %}
+    <div class="mb-8 bg-red-50 border border-red-200 rounded-lg p-4">
+        <h2 class="text-xl font-bold text-red-800 mb-4">Zaległe z poprzednich tygodni</h2>
+        <div class="space-y-2">
+            {% for task in pending_tasks %}
+                {% include 'admin/week/_task_item.html.twig' with {'task': task, 'show_week': true} %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- CURRENT WEEK TASKS grouped by day -->
+    <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
+        {% for day in 1..7 %}
+            <div class="bg-white shadow rounded-lg p-3 min-h-[200px]">
+                <h3 class="font-bold text-center border-b pb-2 mb-2">
+                    {{ ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'][day - 1] }}
+                </h3>
+                <div class="space-y-2">
+                    {% for task in tasks if task.weekdaySnapshot == day %}
+                        {% include 'admin/week/_task_item.html.twig' with {'task': task} %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('week-view');
+        const donePattern = container.dataset.doneUrlPattern;
+        const undoPattern = container.dataset.undoUrlPattern;
+
+        document.querySelectorAll('.task-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const taskId = btn.dataset.taskId;
+                const isDone = btn.dataset.status === 'DONE';
+                const url = (isDone ? undoPattern : donePattern).replace('TASK_ID', taskId);
+
+                try {
+                    btn.disabled = true;
+                    btn.innerText = '...';
+                    
+                    const response = await fetch(url, { method: 'POST' });
+                    if (!response.ok) throw new Error('Action failed');
+                    
+                    const data = await response.json();
+                    
+                    // Simple UI update (reload is safer for full state, but toggle class is faster)
+                    location.reload(); 
+                } catch (err) {
+                    alert('Wystąpił błąd: ' + err.message);
+                    btn.disabled = false;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

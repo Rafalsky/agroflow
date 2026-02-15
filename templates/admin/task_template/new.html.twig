@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edycja Szablonu{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">{% if task_template.id %}Edytuj{% else %}Nowy{% endif %} Szablon Zadania</h1>
+
+    <div class="bg-white shadow sm:rounded-lg p-6 max-w-2xl">
+        {{ form_start(form) }}
+            <div class="mb-4">
+                {{ form_row(form.name, {'attr': {'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'}}) }}
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>{{ form_row(form.points) }}</div>
+                <div>{{ form_row(form.priority) }}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                 <div>{{ form_row(form.weekday) }}</div>
+                 <div>{{ form_row(form.category) }}</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>{{ form_row(form.recurring) }}</div>
+                <div>{{ form_row(form.active) }}</div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                 <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">{{ button_label|default('Zapisz') }}</button>
+                 <a href="{{ path('admin_task_template_index') }}" class="text-gray-600 hover:text-gray-900">Anuluj</a>
+            </div>
+        {{ form_end(form) }}
+
+        {% if task_template.id %}
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                {{ form_start(create_delete_form(task_template)) }}
+                    <button class="text-red-600 hover:text-red-900 text-sm">Usuń ten szablon</button>
+                {{ form_end(create_delete_form(task_template)) }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% if task_template.id %}
+    {% macro create_delete_form(table) %}
+        <form method="post" action="{{ path('admin_task_template_delete', {'id': table.id}) }}" onsubmit="return confirm('Na pewno usunąć?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ table.id) }}">
+        </form>
+    {% endmacro %}
+{% endif %}

@@ -1,0 +1,5 @@
+pentatrion_vite:
+    public_directory: public
+    build_directory: build
+    # proxy_origin: http://127.0.0.1:5173 
+    # Dev server URL, usually needed for Twig functions to point to dev server in dev mode
