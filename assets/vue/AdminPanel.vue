@@ -2,11 +2,11 @@
   <div class="admin-panel h-full min-h-screen bg-white">
     <!-- Tab Navigation -->
     <div class="border-b border-slate-200 sticky top-[56px] bg-white z-20">
-      <div class="max-w-[1400px] mx-auto flex gap-8">
+      <div class="max-w-[1400px] mx-auto flex gap-6 px-6">
         <button v-for="tab in tabs" :key="tab.id"
                 @click="currentTab = tab.id"
                 :class="[
-                  'py-4 px-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all border-b-4',
+                  'py-3 px-1 text-[10px] font-black uppercase tracking-widest transition-all border-b-2',
                   currentTab === tab.id ? 'border-orange-600 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-600'
                 ]">
           {{ tab.name }}
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <main class="max-w-[1400px] mx-auto py-12 pb-32">
+    <main class="max-w-[1400px] mx-auto py-8 px-6">
         <div v-show="currentTab === 'week'">
             <AdminWeek 
                 v-if="weekData"
@@ -29,39 +29,13 @@
                 :assignUrlPattern="urls.assign"
                 :weekLeaderboard="weekData.leaderboard"
                 :teamTotal="weekData.teamTotal"
+                :completionRate="completionRate"
+                :topWorker="topWorker"
                 @open-task="openTaskDrawer"
                 @toggle-task="toggleTask"
                 @assign-worker="assignWorker"
             />
 
-            <!-- Operational Summary Section -->
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic">Zestawienie Punktów</p>
-                <div class="text-4xl font-black italic text-slate-900 mb-2">{{ weekData?.teamTotal || 0 }} pkt</div>
-                <p class="text-[10px] font-black text-emerald-600 uppercase tracking-tighter italic">Łącznie wykonano {{ weekData?.tasks.filter(t => t.status === 'DONE').length }} zadań</p>
-              </div>
-              
-              <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic">Realizacja Planu</p>
-                <div class="text-4xl font-black italic text-slate-900 mb-2">{{ completionRate }}%</div>
-                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                  <div class="bg-orange-600 h-full transition-all duration-1000" :style="{ width: completionRate + '%' }"></div>
-                </div>
-              </div>
-
-              <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic">Lider Tygodnia</p>
-                <div v-if="topWorker" class="flex items-center gap-4">
-                  <div class="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-xl font-black text-white italic">{{ topWorker.shortName }}</div>
-                  <div>
-                    <div class="font-black italic text-slate-900">{{ topWorker.name }}</div>
-                    <div class="text-[10px] font-black text-orange-600 uppercase">{{ topWorker.total_amount }} pkt</div>
-                  </div>
-                </div>
-                <div v-else class="text-sm font-bold italic text-slate-400">Brak danych</div>
-              </div>
-            </div>
         </div>
 
         <div v-show="currentTab === 'templates'">
