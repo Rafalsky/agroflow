@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Domain\WorkCycle\Entity\TaskTemplate;
+use App\Domain\WorkCycle\Entity\Worker;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -52,6 +54,13 @@ class TaskTemplateType extends AbstractType
             ->add('active', CheckboxType::class, [
                 'label' => 'Aktywne',
                 'required' => false,
+            ])
+            ->add('defaultWorker', EntityType::class, [
+                'class' => Worker::class,
+                'choice_label' => 'name',
+                'label' => 'Domyślny pracownik',
+                'required' => false,
+                'placeholder' => '-- Brak --',
             ])
         ;
     }

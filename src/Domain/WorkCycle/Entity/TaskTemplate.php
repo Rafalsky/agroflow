@@ -35,6 +35,10 @@ class TaskTemplate
     #[ORM\Column(type: 'boolean')]
     private bool $active = true;
 
+    #[ORM\ManyToOne(targetEntity: Worker::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Worker $defaultWorker = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +124,18 @@ class TaskTemplate
     public function setActive(bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getDefaultWorker(): ?Worker
+    {
+        return $this->defaultWorker;
+    }
+
+    public function setDefaultWorker(?Worker $defaultWorker): static
+    {
+        $this->defaultWorker = $defaultWorker;
 
         return $this;
     }

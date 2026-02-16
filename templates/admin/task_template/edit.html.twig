@@ -32,20 +32,13 @@
 
         {% if task_template.id %}
             <div class="mt-6 pt-6 border-t border-gray-200">
-                {{ form_start(create_delete_form(task_template)) }}
+                <form method="post" action="{{ path('admin_task_template_delete', {'id': task_template.id}) }}" onsubmit="return confirm('Na pewno usunąć?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task_template.id) }}">
                     <button class="text-red-600 hover:text-red-900 text-sm">Usuń ten szablon</button>
-                {{ form_end(create_delete_form(task_template)) }}
+                </form>
             </div>
         {% endif %}
     </div>
 </div>
 
 {% endblock %}
-
-{% if task_template.id %}
-    {% macro create_delete_form(table) %}
-        <form method="post" action="{{ path('admin_task_template_delete', {'id': table.id}) }}" onsubmit="return confirm('Na pewno usunąć?');">
-            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ table.id) }}">
-        </form>
-    {% endmacro %}
-{% endif %}

@@ -3,12 +3,20 @@
 {% block title %}Agroflow Admin{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Panel Administratora</h1>
-    
-    <div id="vue-admin-week">
-        <!-- Vue widget will receive portal here if needed, or mount directly -->
-        Ładowanie widgetu tygodnia...
+<div class="max-w-[1400px] mx-auto py-12 px-6">
+    <div id="vue-admin-panel" 
+         data-initial="{{ initialData|json_encode }}"
+         data-done-url-pattern="{{ path('admin_week_task_done', {'id': 'TASK_ID'}) }}"
+         data-undo-url-pattern="{{ path('admin_week_task_undo', {'id': 'TASK_ID'}) }}"
+         data-assign-url-pattern="{{ path('admin_week_task_assign', {'id': 'TASK_ID'}) }}"
+         data-generate-url="{{ path('admin_week_generate', {'year': initialData.week.year, 'week': initialData.week.weekNumber}) }}"
+         data-close-url="{{ path('admin_week_close', {'year': initialData.week.year, 'week': initialData.week.weekNumber}) }}"
+         data-incident-list-url="{{ path('admin_incidents') }}"
+         data-incident-export-url="{{ path('incident_export_csv') }}"
+         data-incident-action-url-pattern="{{ path('incident_approve', {'id': 'ID'})|replace({'approve': 'ACTION'}) }}"
+         data-welfare-data-url="{{ path('welfare_data') }}"
+         data-welfare-change-url="{{ path('welfare_change') }}">
+        <p class="text-slate-400 font-medium italic animate-pulse">Inicjalizacja panelu operacyjnego...</p>
     </div>
 </div>
 {% endblock %}

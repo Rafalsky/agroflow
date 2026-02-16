@@ -1,0 +1,285 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AgroFlow - operacyjny system tygodnia produkcyjnego{% endblock %}
+
+
+{% block body %}
+<div class="bg-white text-slate-900 font-sans selection:bg-orange-100 selection:text-orange-900 scroll-smooth">
+    
+    <!-- Hero Section (id #top) -->
+    <section id="top" class="py-12 md:py-24 px-6">
+        <div class="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-[1.1] mb-6">
+                    AgroFlow — operacyjny system tygodnia produkcyjnego
+                </h1>
+                <p class="text-lg text-slate-600 mb-8 max-w-[600px]">
+                    Wsparcie zarządzania tygodniowym cyklem pracy fermy trzody chlewnej: zadania, realizacja, kontrola i historia zdarzeń. To nie jest zwykła “todo-lista” — to prosty system operacyjny pracy zespołu.
+                </p>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-3 text-slate-700 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
+                        Tydzień produkcyjny jako główna jednostka organizacyjna
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-700 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
+                        Zadania cykliczne generowane automatycznie z szablonów
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-700 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
+                        Zaległe zadania zawsze widoczne na górze
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-700 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
+                        Audit zdarzeń od pierwszego dnia
+                    </li>
+                </ul>
+                <div class="flex flex-col md:flex-row gap-4 items-start mb-4">
+                    <a href="{{ path('admin_dashboard') }}" class="w-full md:w-auto px-8 py-4 bg-orange-600 text-white font-bold rounded hover:bg-orange-700 transition-colors text-center">
+                        Otwórz panel (admin)
+                    </a>
+                    <a href="#jak-dziala" class="w-full md:w-auto px-8 py-4 border-2 border-slate-200 text-slate-900 font-bold rounded hover:border-slate-300 transition-colors text-center">
+                        Zobacz jak działa
+                    </a>
+                </div>
+                <p class="text-xs text-slate-400">
+                    Stage 1: tryb administracyjny bez logowania. Kolejne etapy: pracownicy, punkty, dobrostan, awarie.
+                </p>
+            </div>
+            
+            <!-- Hero Mock Visual -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
+                    <span class="text-sm font-bold text-slate-900 uppercase tracking-wider">Widok tygodnia</span>
+                    <span class="text-xs text-slate-400 italic">Makieta wizualna</span>
+                </div>
+                <div class="space-y-6">
+                    <!-- Zaległe -->
+                    <div>
+                        <div class="text-[10px] font-black text-red-600 uppercase mb-2">Zaległe (2)</div>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="text-xs font-bold text-slate-700 italic opacity-50">Przegląd wentylacji H2</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-[10px] font-bold rounded">3 pkt</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="text-xs font-bold text-slate-700 italic opacity-50">Kontrola poidła H1</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-[10px] font-bold rounded">1 pkt</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dzisiaj -->
+                    <div>
+                        <div class="text-[10px] font-black text-orange-600 uppercase mb-2">Dzisiaj (5)</div>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between bg-white p-3 border border-orange-100 rounded-lg shadow-sm">
+                                <span class="text-xs font-bold text-slate-900">Karmienie poranne</span>
+                                <span class="px-2 py-0.5 bg-orange-50 text-orange-600 text-[10px] font-bold rounded">3 pkt</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="text-xs font-bold text-slate-900">Sprawdzenie temperatury</span>
+                                <span class="px-2 py-0.5 bg-slate-100 text-[10px] font-bold rounded">1 pkt</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Jutro -->
+                    <div>
+                        <div class="text-[10px] font-black text-slate-400 uppercase mb-2">Jutro (3)</div>
+                        <div class="flex items-center justify-between bg-white p-3 border border-slate-100 rounded-lg opacity-60">
+                            <span class="text-xs font-medium text-slate-900 text-sm">Dezynfekcja korytarza</span>
+                            <span class="px-2 py-0.5 bg-slate-50 text-[10px] font-bold rounded text-slate-400">5 pkt</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jak działa (id #jak-dziala) -->
+    <section id="jak-dziala" class="py-12 md:py-24 px-6 bg-slate-50 border-y border-slate-100">
+        <div class="max-w-[1100px] mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Jak działa AgroFlow</h2>
+            <p class="text-slate-600 font-medium">System jest zbudowany wokół tygodnia produkcyjnego i instancji zadań generowanych z szablonów.</p>
+        </div>
+        <div class="max-w-[1100px] mx-auto grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="text-orange-600 font-black text-xl mb-4 uppercase tracking-tighter italic">Krok 1</div>
+                <h3 class="text-xl font-bold mb-4 text-slate-900 italic">Definiujesz szablony</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">Zootechnik tworzy TaskTemplate: nazwa, punkty, priorytet, dzień tygodnia, recurring.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="text-orange-600 font-black text-xl mb-4 uppercase tracking-tighter italic">Krok 2</div>
+                <h3 class="text-xl font-bold mb-4 text-slate-900 italic">Powstaje tydzień produkcyjny</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">W niedzielę 00:00 (lub ręcznie na starcie) tworzony jest ProductionWeek i generowane są TaskInstance.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="text-orange-600 font-black text-xl mb-4 uppercase tracking-tighter italic">Krok 3</div>
+                <h3 class="text-xl font-bold mb-4 text-slate-900 italic">Realizacja i kontrola</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">Zadania są oznaczane jako DONE, zaległe pozostają widoczne, a wszystkie zdarzenia trafiają do audytu.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Co rozwiązuje (id #co-rozwiazuje) -->
+    <section id="co-rozwiazuje" class="py-12 md:py-24 px-6">
+        <div class="max-w-[1100px] mx-auto mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Co rozwiązuje</h2>
+        </div>
+        <div class="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-x-12 gap-y-10">
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Rozproszone obowiązki</h4>
+                <p class="text-slate-600 text-sm">Zadania, stan i zdarzenia w jednym miejscu.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Chaos tygodniowy</h4>
+                <p class="text-slate-600 text-sm">Tydzień produkcyjny porządkuje pracę i raportowanie.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Brak kontroli wykonania</h4>
+                <p class="text-slate-600 text-sm">Statusy PENDING/DONE i widoczne zaległości.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Powtarzalne czynności</h4>
+                <p class="text-slate-600 text-sm">Recurring templates automatycznie tworzą instancje.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Brak historii działań</h4>
+                <p class="text-slate-600 text-sm">Audit zdarzeń biznesowych od dnia 0.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 mb-2 italic">Trudny onboarding pracowników</h4>
+                <p class="text-slate-600 text-sm">W Stage 2 proste wejście przez magic link.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Moduły (id #moduly) -->
+    <section id="moduly" class="py-12 md:py-24 px-6 bg-slate-950 text-white rounded-t-[3rem]">
+        <div class="max-w-[1100px] mx-auto mb-16">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4 italic">Moduły systemu</h2>
+            <p class="text-slate-400 font-medium">AgroFlow to modularny monolit: jedna aplikacja Symfony, jedna baza PostgreSQL, logicznie odseparowane domeny.</p>
+        </div>
+        <div class="max-w-[1100px] mx-auto grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                <span class="text-[10px] font-black uppercase text-orange-500 mb-2 block tracking-widest">Stage 1</span>
+                <h3 class="text-xl font-bold mb-4 italic">WorkCycle</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• ProductionWeek (OPEN/CLOSED)</li>
+                    <li class="flex items-start gap-2">• TaskTemplate → TaskInstance (snapshot)</li>
+                    <li class="flex items-start gap-2">• Widok tygodniowy + zaległe</li>
+                </ul>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                <span class="text-[10px] font-black uppercase text-orange-500 mb-2 block tracking-widest">Stage 0</span>
+                <h3 class="text-xl font-bold mb-4 italic">Audit</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• Zdarzenia biznesowe jako log</li>
+                    <li class="flex items-start gap-2">• Payload JSON + timestamp</li>
+                    <li class="flex items-start gap-2">• Podstawa kontroli operacyjnej</li>
+                </ul>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                <span class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Stage 2</span>
+                <h3 class="text-xl font-bold mb-4 italic">Worker</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• Pracownicy i identyfikacja</li>
+                    <li class="flex items-start gap-2">• Wejście przez magic link</li>
+                    <li class="flex items-start gap-2">• Rejestr kto wykonał zadanie</li>
+                </ul>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                <span class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Stage 3</span>
+                <h3 class="text-xl font-bold mb-4 italic">Scoring</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• Ledger punktów</li>
+                    <li class="flex items-start gap-2">• Punkty indywidualne i zespołowe</li>
+                    <li class="flex items-start gap-2">• Cele tygodniowe (później)</li>
+                </ul>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl">
+                <span class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Stage 4</span>
+                <h3 class="text-xl font-bold mb-4 italic">Welfare</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• Aktualny stan stada</li>
+                    <li class="flex items-start gap-2">• Zmiany z powodem + historia</li>
+                    <li class="flex items-start gap-2">• Walidacja braku stanu ujemnego</li>
+                </ul>
+            </div>
+            <div class="bg-white/5 border border-white/10 p-8 rounded-2xl md:col-span-2 xl:col-span-1 border-dashed border-white/20">
+                <span class="text-[10px] font-black uppercase text-slate-500 mb-2 block tracking-widest">Stage 5</span>
+                <h3 class="text-xl font-bold mb-4 italic">6) Incidents</h3>
+                <ul class="text-sm text-slate-400 space-y-2">
+                    <li class="flex items-start gap-2">• Awarie jako osobny byt</li>
+                    <li class="flex items-start gap-2">• Proces: zgłoszenie → akceptacja → rozwiązanie</li>
+                    <li class="flex items-start gap-2">• Raportowanie awarii</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FAQ (id #faq) -->
+    <section id="faq" class="py-12 md:py-24 px-6">
+        <div class="max-w-[800px] mx-auto">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 text-center">FAQ</h2>
+            <div class="space-y-4">
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Czy to jest zwykła todo-lista?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Nie. AgroFlow jest zbudowany wokół tygodnia produkcyjnego i procesu pracy zespołu: generowanie zadań, kontrola realizacji, zaległości i audyt.
+                    </p>
+                </details>
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Czy system wymaga logowania?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Stage 1 działa bez logowania w trybie administracyjnym. Logowanie/identyfikacja pracowników wchodzi od Stage 2.
+                    </p>
+                </details>
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Jak powstają zadania na nowy tydzień?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Na podstawie aktywnych szablonów recurring tworzone są instancje zadań (TaskInstance) dla nowego ProductionWeek. Generowanie jest idempotentne.
+                    </p>
+                </details>
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Co z zaległymi zadaniami?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Zaległe zadania nie znikają. Są widoczne na górze listy jako “Zaległe” aż do wykonania.
+                    </p>
+                </details>
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Po co audit od dnia 0?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Audit daje kontrolę operacyjną i historię działań: co powstało, co wykonano, kiedy i jak zmienił się stan.
+                    </p>
+                </details>
+                <details class="group border border-slate-200 rounded-xl p-4 md:p-6 bg-white transition-colors hover:bg-slate-50">
+                    <summary class="font-bold text-slate-900 cursor-pointer list-none flex justify-between items-center italic">
+                        Czy dobrostan zwierząt jest częścią tego systemu?
+                        <span class="text-orange-600 font-bold text-xl group-open:rotate-45 transition-transform">+</span>
+                    </summary>
+                    <p class="mt-4 text-slate-600 text-sm leading-relaxed">
+                        Tak, jako osobny moduł (Welfare). Jest niezależny domenowo od WorkCycle, ale korzysta z tej samej aplikacji i audytu.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

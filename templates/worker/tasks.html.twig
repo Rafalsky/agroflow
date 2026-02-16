@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moje Zadania - {{ worker.name }}{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
+    <!-- Simple Header for Worker -->
+    <div class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-amber-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-5xl">🐷</span>
+                    <div>
+                        <h1 class="text-2xl font-bold bg-gradient-to-r from-amber-700 to-orange-600 bg-clip-text text-transparent">
+                            Witaj, {{ worker.shortName }}!
+                        </h1>
+                        <div class="flex items-center gap-2">
+                            <p class="text-sm text-amber-600">{{ worker.name }}</p>
+                            <span class="text-xs px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full font-bold">
+                                🏆 {{ totalPoints }} pkt
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-gray-500">Zalogowano jako pracownik</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Vue Mount Point -->
+        <div id="vue-worker-tasks"
+             data-tasks="{{ tasksData|json_encode }}"
+             data-worker-name="{{ worker.shortName }}"
+             data-total-points="{{ totalPoints }}"
+             data-week-points="{{ weekPoints }}"
+             data-done-url-pattern="{{ path('worker_task_done', {'id': 'TASK_ID'}) }}">
+
+
+             
+             <!-- Fallback / Loading -->
+             <div class="text-center py-24">
+                <div class="text-6xl mb-4 animate-bounce">🐷</div>
+                <p class="text-2xl text-amber-700 font-semibold">Ładowanie zadań...</p>
+                <p class="text-amber-600 mt-2">Przygotowujemy Twoje zadania</p>
+             </div>
+        </div>
+    </div>
+
+    <!-- Welfare & Stock Widget -->
+    <div class="mt-12">
+      <div id="vue-welfare-widget"
+           data-data-url="{{ path('welfare_data') }}"
+           data-change-url="{{ path('welfare_change') }}">
+           <!-- Loading skeleton -->
+           <div class="animate-pulse bg-white rounded-3xl h-64 border-2 border-emerald-50 shadow-lg"></div>
+      </div>
+    </div>
+
+    <!-- Incident & Failures Widget -->
+    <div class="mt-12 pb-12">
+      <div id="vue-incident-widget"
+           data-list-url="{{ path('incident_list') }}"
+           data-report-url="{{ path('incident_report') }}"
+           data-resolve-url-pattern="{{ path('incident_resolve', {'id': 'ID'}) }}">
+           <div class="animate-pulse bg-white rounded-3xl h-64 border-2 border-red-50 shadow-lg"></div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+

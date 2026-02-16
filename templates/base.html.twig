@@ -1,20 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Agroflow{% endblock %}</title>
         {% block stylesheets %}
-            {{ vite_entry_link_tags('app') }}
             {{ vite_entry_link_tags('admin') }}
+        {% endblock %}
+    </head>
+    <body class="bg-white min-h-screen font-sans selection:bg-orange-100 selection:text-orange-900 scroll-smooth">
+        {% block header %}
+        <!-- Top Navigation (Sticky 56px) -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-slate-200 h-[56px] flex items-center px-4 md:px-8">
+            <div class="max-w-[1100px] mx-auto w-full flex justify-between items-center">
+                <a href="{{ path('app_home') }}" class="text-xl font-bold text-slate-900 tracking-tight">AgroFlow</a>
+                
+                <!-- Desktop Links -->
+                <div class="hidden md:flex items-center gap-6">
+                    {% if app.request.get('_route') == 'app_home' %}
+                        <a href="#jak-dziala" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Jak działa</a>
+                        <a href="#moduly" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Moduły</a>
+                        <a href="#faq" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">FAQ</a>
+                    {% else %}
+                        <a href="{{ path('admin_dashboard') }}" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">📊 Dashboard</a>
+                        <a href="{{ path('admin_incidents') }}" class="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">🚨 Awarie</a>
+                    {% endif %}
+                    <div class="h-4 w-px bg-slate-200 ml-2"></div>
+                    <a href="/w/" class="text-sm font-medium text-slate-600 hover:text-slate-900 ml-2">Wejście pracownika</a>
+                    <a href="{{ path('admin_dashboard') }}" class="px-4 py-2 bg-orange-600 text-white text-sm font-bold rounded hover:bg-orange-700 transition-colors ml-2">
+                        Panel (admin)
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <div class="md:hidden flex items-center gap-4">
+                    <a href="{{ path('admin_dashboard') }}" class="px-3 py-1.5 bg-orange-600 text-white text-xs font-bold rounded">Panel</a>
+                    <button onclick="document.getElementById('global-mobile-menu').classList.toggle('hidden')" class="p-1">
+                        <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu Surface -->
+        <div id="global-mobile-menu" class="hidden fixed inset-0 z-40 bg-white pt-[56px] px-6">
+            <div class="flex flex-col gap-6 pt-10">
+                {% if app.request.get('_route') == 'app_home' %}
+                    <a href="#jak-dziala" onclick="document.getElementById('global-mobile-menu').classList.add('hidden')" class="text-lg font-bold text-slate-900">Jak działa</a>
+                    <a href="#moduly" onclick="document.getElementById('global-mobile-menu').classList.add('hidden')" class="text-lg font-bold text-slate-900">Moduły</a>
+                    <a href="#faq" onclick="document.getElementById('global-mobile-menu').classList.add('hidden')" class="text-lg font-bold text-slate-900">FAQ</a>
+                {% else %}
+                    <a href="{{ path('admin_dashboard') }}" class="text-lg font-bold text-slate-900">📊 Dashboard</a>
+                    <a href="{{ path('admin_incidents') }}" class="text-lg font-bold text-slate-900">🚨 Awarie</a>
+                {% endif %}
+                <hr class="border-slate-100">
+                <a href="/w/" class="text-lg font-bold text-slate-600">Wejście pracownika</a>
+                <a href="{{ path('admin_dashboard') }}" class="text-lg font-bold text-orange-600">Panel (admin)</a>
+            </div>
+        </div>
+        {% endblock %}
+
+        <main class="pt-[56px]">
+            {% block body %}{% endblock %}
+        </main>
+        
+        {% block footer %}
+        <footer class="py-12 md:py-24 px-6 border-t border-slate-100 bg-slate-50">
+            <div class="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-12 text-slate-900">
+                <div>
+                    <span class="text-2xl font-black text-slate-950 uppercase tracking-tight block mb-2 italic">AgroFlow</span>
+                    <p class="text-slate-500 font-medium text-sm">Operacyjny system tygodnia produkcyjnego</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-10 md:gap-20">
+                    <div class="flex flex-col gap-4">
+                        <h5 class="font-black text-[10px] uppercase text-slate-400 tracking-[0.2em] italic">System</h5>
+                        <a href="{{ path('admin_dashboard') }}" class="text-slate-600 hover:text-slate-900 text-sm font-bold transition-all">Panel (admin)</a>
+                        <a href="{{ path('app_home') }}#faq" class="text-slate-600 hover:text-slate-900 text-sm font-bold transition-all">FAQ</a>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-[1100px] mx-auto mt-20 pt-8 border-t border-slate-200/50">
+                <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase italic">
+                    &copy; {{ "now"|date("Y") }} AgroFlow &mdash; MVP (Stage 1)
+                </p>
+            </div>
+        </footer>
         {% endblock %}
 
         {% block javascripts %}
-            {{ vite_entry_script_tags('app') }}
             {{ vite_entry_script_tags('admin') }}
         {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
     </body>
 </html>

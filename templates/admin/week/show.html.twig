@@ -3,87 +3,95 @@
 {% block title %}Tydzień {{ week.weekNumber }}/{{ week.year }}{% endblock %}
 
 {% block body %}
-<div class="container mx-auto px-4 py-8" id="week-view" 
-     data-done-url-pattern="{{ path('admin_week_task_done', {'id': 'TASK_ID'}) }}"
-     data-undo-url-pattern="{{ path('admin_week_task_undo', {'id': 'TASK_ID'}) }}">
-    
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-3xl font-bold">Tydzień {{ week.weekNumber }} / {{ week.year }}</h1>
-            <span class="text-gray-500">Status: {{ week.status }}</span>
+<div class="bg-white text-slate-900">
+    <div class="max-w-[1100px] mx-auto px-6 py-12" id="week-view" 
+         data-done-url-pattern="{{ path('admin_week_task_done', {'id': 'TASK_ID'}) }}"
+         data-undo-url-pattern="{{ path('admin_week_task_undo', {'id': 'TASK_ID'}) }}">
+        
+        <!-- Header Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-8 mb-8 shadow-sm">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-6">
+                    <a href="{{ path('admin_week_show', {'year': prev_week.year, 'week': prev_week.week}) }}" 
+                       class="p-3 rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-none mb-2 italic">
+                            Tydzień {{ week.weekNumber }} / {{ week.year }}
+                        </h1>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider {{ week.status == 'OPEN' ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-600' }}">
+                            {{ week.status == 'OPEN' ? 'TRYB OPERACYJNY' : 'TYDZIEŃ ZAMKNIĘTY' }}
+                        </span>
+                    </div>
+                    <a href="{{ path('admin_week_show', {'year': next_week.year, 'week': next_week.week}) }}" 
+                       class="p-3 rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <form method="post" action="{{ path('admin_week_generate', {'year': week.year, 'week': week.weekNumber}) }}" class="inline">
+                        <button type="submit" class="bg-orange-600 text-white px-6 py-3 rounded-xl hover:bg-orange-700 font-bold shadow-sm transition-colors uppercase text-sm tracking-wider">
+                            Generuj Zadania
+                        </button>
+                    </form>
+                    {% if week.status == 'OPEN' %}
+                        <form method="post" action="{{ path('admin_week_close', {'year': week.year, 'week': week.weekNumber}) }}" class="inline" onsubmit="return confirm('Czy na pewno chcesz zamknąć tydzień? Ta operacja jest nieodwracalna.');">
+                            <button type="submit" class="bg-slate-900 text-white px-6 py-3 rounded-xl hover:bg-slate-950 font-bold shadow-sm transition-colors text-sm tracking-wider">
+                                Zamknij Tydzień
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{{ path('admin_task_template_index') }}" class="px-6 py-3 border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-colors text-sm tracking-wider">
+                        Szablony
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="space-x-2">
-            <form method="post" action="{{ path('admin_week_generate', {'year': week.year, 'week': week.weekNumber}) }}" class="inline">
-                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Generuj Zadania</button>
-            </form>
-             <a href="{{ path('admin_task_template_index') }}" class="text-indigo-600 hover:text-indigo-900 px-4">Szablony</a>
-        </div>
-    </div>
 
     {% for message in app.flashes('success') %}
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">{{ message }}</span>
+        <div class="bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-400 text-green-800 px-6 py-4 rounded-xl relative mb-6 shadow-lg" role="alert">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">✅</span>
+                <span class="block sm:inline font-semibold">{{ message }}</span>
+            </div>
         </div>
     {% endfor %}
 
-    <!-- PENDING TASKS FROM PAST -->
-    {% if pending_tasks|length > 0 %}
-    <div class="mb-8 bg-red-50 border border-red-200 rounded-lg p-4">
-        <h2 class="text-xl font-bold text-red-800 mb-4">Zaległe z poprzednich tygodni</h2>
-        <div class="space-y-2">
-            {% for task in pending_tasks %}
-                {% include 'admin/week/_task_item.html.twig' with {'task': task, 'show_week': true} %}
-            {% endfor %}
-        </div>
+     <!-- VUE MOUNT POINT -->
+    <div id="vue-admin-week" class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm min-h-[400px]"
+         data-week="{{ weekData|json_encode }}"
+         data-tasks="{{ tasksData|json_encode }}"
+         data-pending-tasks="{{ pendingTasksData|json_encode }}"
+         data-workers="{{ workersData|json_encode }}"
+         data-generate-url="{{ path('admin_week_generate', {'year': week.year, 'week': week.weekNumber}) }}"
+         data-done-url-pattern="{{ path('admin_week_task_done', {'id': 'TASK_ID'}) }}"
+         data-undo-url-pattern="{{ path('admin_week_task_undo', {'id': 'TASK_ID'}) }}"
+          data-assign-url-pattern="{{ path('admin_week_task_assign', {'id': 'TASK_ID'}) }}"
+          data-week-leaderboard="{{ weekLeaderboard|json_encode }}"
+          data-team-total="{{ teamTotal }}">
+         
+         <!-- Loading state -->
+         <div class="text-center py-24">
+            <p class="text-xl text-slate-400 font-bold italic animate-pulse">Ładowanie widoku tygodnia...</p>
+         </div>
     </div>
-    {% endif %}
+</div>
+</div>
 
-    <!-- CURRENT WEEK TASKS grouped by day -->
-    <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
-        {% for day in 1..7 %}
-            <div class="bg-white shadow rounded-lg p-3 min-h-[200px]">
-                <h3 class="font-bold text-center border-b pb-2 mb-2">
-                    {{ ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Ndz'][day - 1] }}
-                </h3>
-                <div class="space-y-2">
-                    {% for task in tasks if task.weekdaySnapshot == day %}
-                        {% include 'admin/week/_task_item.html.twig' with {'task': task} %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
+<!-- Welfare & Stock Summary -->
+<div class="mt-12 max-w-[1100px] mx-auto px-6 pb-24">
+    <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-6 italic underline decoration-orange-500 decoration-4 underline-offset-4">Dobrostan i Stan Hodowli</h3>
+    <div id="vue-welfare-widget"
+         data-data-url="{{ path('welfare_data') }}"
+         data-change-url="{{ path('welfare_change') }}">
+         <div class="animate-pulse bg-white border border-slate-200 rounded-2xl h-64 shadow-sm"></div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('week-view');
-        const donePattern = container.dataset.doneUrlPattern;
-        const undoPattern = container.dataset.undoUrlPattern;
-
-        document.querySelectorAll('.task-toggle-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const taskId = btn.dataset.taskId;
-                const isDone = btn.dataset.status === 'DONE';
-                const url = (isDone ? undoPattern : donePattern).replace('TASK_ID', taskId);
-
-                try {
-                    btn.disabled = true;
-                    btn.innerText = '...';
-                    
-                    const response = await fetch(url, { method: 'POST' });
-                    if (!response.ok) throw new Error('Action failed');
-                    
-                    const data = await response.json();
-                    
-                    // Simple UI update (reload is safer for full state, but toggle class is faster)
-                    location.reload(); 
-                } catch (err) {
-                    alert('Wystąpił błąd: ' + err.message);
-                    btn.disabled = false;
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}
+

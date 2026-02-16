@@ -1,0 +1,36 @@
+{
+  "base": "/build/",
+  "entryPoints": {
+    "app": {
+      "css": [
+        "/build/assets/app-DmtX_YYg.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/build/assets/app-TSXa87MB.js"
+      ],
+      "legacy": false,
+      "preload": []
+    },
+    "admin": {
+      "css": [
+        "/build/assets/admin-DLo8OfS6.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/build/assets/admin-Dh4ovOHG.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "8.2.3",
+    8,
+    2,
+    3
+  ],
+  "viteServer": null
+}

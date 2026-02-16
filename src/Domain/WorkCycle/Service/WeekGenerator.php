@@ -80,6 +80,11 @@ class WeekGenerator
 
             $instance->setStatus('PENDING');
 
+            // Auto-assign to default worker if set
+            if ($template->getDefaultWorker()) {
+                $instance->setWorker($template->getDefaultWorker());
+            }
+
             $this->entityManager->persist($instance);
             $createdCount++;
         }

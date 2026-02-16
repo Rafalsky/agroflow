@@ -43,6 +43,9 @@ class TaskInstance
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $doneAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?Worker $worker = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,6 +143,18 @@ class TaskInstance
     public function setDoneAt(?\DateTimeImmutable $doneAt): static
     {
         $this->doneAt = $doneAt;
+
+        return $this;
+    }
+
+    public function getWorker(): ?Worker
+    {
+        return $this->worker;
+    }
+
+    public function setWorker(?Worker $worker): static
+    {
+        $this->worker = $worker;
 
         return $this;
     }

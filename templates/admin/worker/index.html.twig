@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pracownicy{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-6 mb-8 border-2 border-amber-200">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-5xl">👥</span>
+                <div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-700 to-orange-600 bg-clip-text text-transparent">
+                        Pracownicy
+                    </h1>
+                    <p class="text-amber-600 text-sm mt-1">Zarządzaj zespołem i przypisaniami zadań</p>
+                </div>
+            </div>
+            <a href="{{ path('admin_worker_new') }}" 
+               class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2">
+                <span class="text-xl">✨</span> Nowy Pracownik
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for worker in workers %}
+            <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl p-6 border-2 transition-all hover:shadow-xl hover:scale-[1.02]
+                        {{ worker.active ? 'border-green-300 hover:border-green-400' : 'border-gray-300 hover:border-gray-400' }}">
+                
+                <!-- Worker Avatar & Name -->
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="flex-shrink-0">
+                        <div class="h-16 w-16 rounded-2xl flex items-center justify-center shadow-md
+                                    {{ worker.active ? 'bg-gradient-to-br from-green-400 to-emerald-500' : 'bg-gradient-to-br from-gray-400 to-gray-500' }}">
+                            <span class="text-2xl font-bold text-white">{{ worker.shortName }}</span>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-800">{{ worker.name }}</h3>
+                        <p class="text-sm text-gray-500">{{ worker.shortName }}</p>
+                    </div>
+                </div>
+
+                <!-- Status Badge -->
+                <div class="mb-4">
+                    {% if worker.active %}
+                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-green-100 text-green-800 shadow-sm">
+                            <span class="mr-2">✓</span> Aktywny
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-800 shadow-sm">
+                            <span class="mr-2">✗</span> Nieaktywny
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Access Token Info (could be expanded later) -->
+                <div class="mb-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                    <p class="text-xs text-amber-700 font-medium">
+                        🔑 Token dostępu: <span class="font-mono">{{ worker.accessToken[:8] }}...</span>
+                    </p>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex gap-2 pt-4 border-t-2 border-amber-100">
+                    <a href="{{ path('admin_worker_edit', {'id': worker.id}) }}" 
+                       class="flex-1 text-center px-4 py-2 bg-amber-100 text-amber-800 font-semibold rounded-lg hover:bg-amber-200 transition-all">
+                        ✏️ Edytuj
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-full">
+                <div class="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl p-12 border-2 border-amber-200 text-center">
+                    <div class="text-6xl mb-4">🐷</div>
+                    <p class="text-xl text-gray-600 font-semibold mb-2">Brak pracowników</p>
+                    <p class="text-gray-500 mb-6">Dodaj pierwszego pracownika, aby rozpocząć przypisywanie zadań</p>
+                    <a href="{{ path('admin_worker_new') }}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                        <span class="text-xl">✨</span> Dodaj Pracownika
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

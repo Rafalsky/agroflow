@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zarządzanie Awariami - Agroflow{% endblock %}
+
+{% block body %}
+<div class="bg-white text-slate-900">
+    <div class="max-w-[1100px] mx-auto py-12 px-6">
+        <a href="{{ path('admin_dashboard') }}" class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-900 font-bold mb-10 transition-colors uppercase text-xs tracking-widest italic group">
+            <span class="group-hover:-translate-x-1 transition-transform">←</span> Powrót do dashboardu
+        </a>
+
+        <div id="vue-admin-incident-manager"
+             data-list-url="{{ path('incident_list', {'all': 'true'}) }}"
+             data-export-url="{{ path('incident_export_csv') }}"
+             data-action-url-pattern="{{ path('incident_report') }}/../ID/ACTION">
+             <!-- Loading skeleton -->
+             <div class="animate-pulse bg-white border border-slate-200 rounded-2xl h-96 shadow-sm"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
