@@ -26,3 +26,8 @@ Bezwzględnie respektuj paletę barw podczas budowy interfejsu (Tailwind CSS):
 
 5. **Oddzielenie Treści od Logiki**
 Wszelkie teksty informacyjne, procedury BHP, wyposażenie hali czy wytyczne do zadań umieszczaj bezpośrednio w polach tekstowych (np. `instruction` w `TaskTemplate`) w samej bazie danych (krzystając z Doctrine Migrations w celu ich zasilenia). **Nigdy** nie hardkoduj treści merytorycznych ("Załóż maskę", "Zgarnij ruszt") bezpośrednio w plikach widoków `.html.twig` czy `.vue`.
+
+6. **Testowalność e2e**
+Każdy feature ma proof of concept w postaci:
+1. Testu e2e cucumber z jawnymi stepami
+2. Dowodem dla użytkownika w postaci zrzutu ekranu funkcjonalności, kroków do weryfikacji poprawnej implementacji czy pełnoprawnym dowodem
