@@ -9,8 +9,8 @@ Zanim wygenerujesz jakikolwiek kod:
 
 ## ZASADY WDROŻENIOWE (CORE RULES)
 
-1. **Zero generycznych "Todo"**
-Agroflow to narzędzie egzekucji operacji i tworzenia audytu bioasekuracyjnego we współpracy z wymogami PIWET. Nawet codzienne przejście przez halę to nie jest proste "Tickbox" (zaznacz i zapomnij), lecz punkt zbierania danych operacyjnych, klimatycznych, zgłaszania incydentów i martwych sztuk.
+1. **Zero generycznych "Todo" (Podejście "Planu Lekcji")**
+Agroflow to narzędzie egzekucji operacji i tworzenia audytu bioasekuracyjnego we współpracy z wymogami PIWET. Narzędzie skupia się na **nawykach i rytmie dnia** – jak plan lekcji w szkole. Zootechnik konfiguruje kalendarz raz, a na co dzień aplikacja sprawdza "obecność" z zaplanowanych operacji (odhaczanie powtarzalnych czynności z okazyjnymi wyjątkami we wpadających zadaniach). Nawet codzienne przejście przez halę to punkt zbierania danych operacyjnych, klimatycznych, zgłaszania incydentów i martwych sztuk, a nie zwykły tickbox.
 
 2. **Widget Driven Architecture**
 Jeśli zadanie powtarzalne (np. obchód, karmienie, sprzedaż) polega na wpisaniu specyficznej wartości (liczba sztuk, stopnie Celsjusza, notatka z naprawy, numer lochy), zaprojektuj **Dynamiczny Widget Vue** (z użyciem parametru `widget_type` zdefiniowanego w encji `TaskTemplate`), a zebrane w nim dane zserializuj jako JSON i zapisz do `execution_payload` w `TaskInstance` przy oznaczaniu zadania jako DONE.

@@ -5,15 +5,14 @@ Celem systemu jest wsparcie zarządzania tygodniowym cyklem pracy w gospodarstwi
 
 planowanie i realizację zadań operacyjnych,
 
-kontrolę wykonania zadań przez zespół,
+kontrolę wykonania zadań i budowanie odpowiedzialności zespołowej,
 
-rejestrowanie zdarzeń operacyjnych,
+rejestrowanie zdarzeń operacyjnych i przygotowanie fundamentu pod dalsze moduły (np. dobrostan zwierząt).
 
-budowanie odpowiedzialności zespołowej,
-
-przygotowanie fundamentu pod dalsze moduły (np. dobrostan zwierząt).
-
-System nie jest klasyczną aplikacją typu „todo”, lecz uproszczonym systemem operacyjnym zarządzającym cyklem tygodniowym produkcji.
+**System nie jest klasyczną aplikacją typu „todo”. Jego mechanika opiera się o rutynę, nawyki i rytm dnia:**
+- Podejście "Planu Lekcji w Szkole" - raz ułożony harmonogram (np. w sierpniu) służy zespołowi przez kolejne miesiące (aż do czerwca) z jedynie drobnymi, okazyjnymi modyfikacjami.
+- System nie pyta "co masz dzisiaj do zrobienia", ale weryfikuje "czy odhaczyłeś wszystko to, co ZAWSZE robisz o tej porze w dany dzień" (np. *czy woda zakręcona?*).
+- Zootechnik konfiguruje zadania jednorazowo, a na co dzień sprawdza jedynie "obecność" (wykonanie) oraz raporty i wygenerowane eksporty. Użytkownicy wiedzą co mają robić, a system upewnia się, że nie pominęli kluczowych kroków (BHP, PIWET).
 
 2. Punkt wyjścia domeny
 
@@ -164,7 +163,10 @@ identyfikator encji,
 
 dane pomocnicze (JSON).
 
-Celem audytu jest pełna kontrola operacyjna oraz możliwość późniejszej analizy.
+Celem audytu jest pełna kontrola operacyjna, wyciąganie błędów oraz możliwość późniejszej analizy.
+
+**Raportowanie i Eksport:**
+Z uwagi na zbierane dane pomiarowe i powtarzalne checklisty, pełna warstwa raportowa musi w późniejszych etapach zakładać **eksport danych do pliku Excel/CSV z uwzględnieniem podanych przez administratora filtrów**.
 
 9. Punkty i odpowiedzialność zespołowa (etap późniejszy)
 
