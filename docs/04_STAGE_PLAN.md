@@ -109,6 +109,8 @@ DONE/UNDO działa i zapisuje audyt
 
 zmiany template nie psują instancji (snapshot istnieje)
 
+potwierdzony test E2E (Cucumber/Gherkin) oraz wizualny dowód poprawnego działania ficzera (PoC)
+
 Milestones
 
 Encje + migracje: production_week, task_template, task_instance
@@ -158,6 +160,8 @@ istnieje możliwość dezaktywacji workera (token przestaje działać)
 
 audit rejestruje “task done by worker”
 
+potwierdzony test E2E oraz wizualny dowód poprawnego działania ficzera
+
 Milestones
 
 Worker entity + migration
@@ -197,6 +201,8 @@ UNDO usuwa/kompensuje zapis w ledger deterministycznie
 
 suma punktów = suma ledger (bez niespójności)
 
+potwierdzony test E2E oraz wizualny dowód poprawnego działania ficzera
+
 Milestones
 
 ScoreLedger entity + migration
@@ -224,11 +230,9 @@ Historia zmian + audyt
 
 Deliverables
 
-/welfare — widok modułu (widget Vue)
+Szybki widget Vue w szufladzie `ContextDrawer` przypięty do zadania (np. `WelfareDeathWidget`) pozwalający na zgłoszenie upadków/urodzeń podczas obchodu.
 
-aktualny stan + formularz zmiany (delta + reason + note)
-
-lista historii zmian
+aktualny stan + raport historii w osobnym widoku dla Zootechnika
 
 walidacja “nie schodzimy poniżej 0”
 
@@ -240,7 +244,9 @@ CurrentStock nie jest edytowany ręcznie (tylko serwis)
 
 audyt rejestruje zmianę
 
-UI mobilne działa stabilnie (bez skomplikowanych ekranów)
+UI mobilne działa stabilnie poprzez wbudowane widgety w szufladę zadania
+
+potwierdzony test E2E oraz wizualny dowód poprawnego działania ficzera
 
 Milestones
 
@@ -255,7 +261,7 @@ Vue widget + historia
 Stage 5 — Incidents (awarie) jako osobny byt
 Cel
 
-Zgłoszenia awarii z procesem akceptacji i rozwiązywania. Widoczność awarii nad listą zadań.
+Zgłoszenia awarii z procesem akceptacji i rozwiązywania. Zgłaszanie opiera się o szybki `IncidentReportWidget` wywoływany wewnątrz widoku zadania, by uniknąć budowy osobnych ekranów formularzy dla pracownika. Awarie zatwierdzone pojawiają się w osobnym panelu.
 
 Scope
 
@@ -284,6 +290,8 @@ pełny flow: report → approve/reject → resolve
 awarie są oddzielone od zadań cyklicznych (osobny byt)
 
 audyt rejestruje wszystkie przejścia statusów
+
+potwierdzony test E2E oraz wizualny dowód poprawnego działania ficzera
 
 Milestones
 

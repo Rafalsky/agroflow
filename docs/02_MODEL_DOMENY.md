@@ -135,7 +135,7 @@ priority_snapshot
 
 weekday_snapshot
 
-status (PENDING | DONE)
+status (PENDING | DONE | FROZEN | SKIPPED)
 
 done_at (nullable datetime)
 
@@ -281,7 +281,7 @@ Stan nie może spaść poniżej 0.
 
 Każda zmiana musi być zapisana.
 
-CurrentStock jest aktualizowany wyłącznie przez serwis domenowy.
+CurrentStock jest aktualizowany wyłącznie przez serwis domenowy. Wprowadzanie zmian realizowane operacyjnie zgłoszeniami przez zwinne Widgety (np. w szufladzie zadania).
 
 8. Incidents (Stage 5)
 8.1 Incident
@@ -310,7 +310,7 @@ resolved_at (nullable)
 
 Zasady:
 
-Incident jest osobnym bytem, nie dziedziczy po TaskInstance.
+Incident jest osobnym bytem, nie dziedziczy po TaskInstance, jednakże jego początkowe zgłaszanie odbywa się poprzez szybki Widget (`IncidentReportWidget`) na widoku zadania, by unikać osobnego ciężkiego UX.
 
 Po zatwierdzeniu może być wyświetlany w sekcji „Awarie”.
 

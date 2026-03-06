@@ -46,6 +46,10 @@ Celem architektury jest:
 * Vue 3 (widgety / moduły interaktywne)
 * Vite lub Webpack Encore (pipeline assetów)
 
+## Testy
+
+* Testy e2e (Gherkin / Cucumber) definiujące przypadki BDD dla każdego nowego punktu funkcjonalności operacyjnej.
+
 ## Infrastruktura
 
 * Docker (docelowo)
@@ -224,9 +228,9 @@ Vue:
 
 * interakcje (oznacz jako DONE)
 * dynamiczne odświeżanie list
-* formularze
+* formularze (Widget Driven Architecture - wstrzykiwane moduły takie jak WelfareDeathWidget)
 
-Nie budujemy SPA w Stage 1.
+Nie budujemy wielkich, osobnych SPA w pierwszych fazach rozbudowy modułów operacyjnych (żeby zachować prostotę UX dla pracownika na hali). Zamiast tego polegamy na widgetach.
 
 ---
 

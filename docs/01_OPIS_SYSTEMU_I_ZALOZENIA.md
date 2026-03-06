@@ -123,6 +123,8 @@ PENDING
 
 DONE
 
+FROZEN / SKIPPED (zadania zablokowane lub celowo pominięte)
+
 7. Widoki systemu (Stage 1)
 Widok tygodniowy (desktop)
 
@@ -208,9 +210,9 @@ walidację (brak stanu ujemnego),
 
 historię zmian,
 
-mobilny interfejs operacyjny.
+szybkie zgłaszanie poprzez **Widget Driven Architecture** (np. `WelfareDeathWidget`) zintegrowane bezpośrednio w bocznym panelu zadania (ContextDrawer), bez konieczności budowy osobnego, wielkiego modułu UI.
 
-Moduł jest niezależny domenowo od WorkCycle, lecz korzysta z tej samej infrastruktury i systemu audytu.
+Moduł jest niezależny domenowo od WorkCycle, lecz operacyjnie mocno z nim zintegrowany.
 
 12. Technologia
 
@@ -262,5 +264,5 @@ Stage 0 – infrastruktura i fundament
 Stage 1 – tygodniowy cykl + zadania (admin only)
 Stage 2 – pracownicy + magic access
 Stage 3 – scoring
-Stage 4 – welfare
-Stage 5 – incidents
+Stage 4 – welfare (zwinne Widgety Vue, np. `WelfareDeathWidget`)
+Stage 5 – incidents (zwinne Widgety Vue, np. `IncidentReportWidget`)
