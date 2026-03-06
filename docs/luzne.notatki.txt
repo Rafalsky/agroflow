@@ -1,0 +1,168 @@
+Niektore z ponizszej lsity bede do wmontowania w ramach bazy (nowa migracja?) inne jako implementacja. Ponizej jest listwa wymagan w formie luzny notatek. Twoje zadanie to ustandaryzowac te notatki, rozdzielic co jest rekordem w bazie a co jest nowa funkjonalnoscia w kodzie nastepnie rozpisac plan implementacji tych wymagan i przejsc do wykonywania tych implementacji.
+
+ponizje luzne notatki:
+
+deratyzacja - wpiac wszystkie karmiki - to jest chyba powtarzalne zadanie
+w kazdy dzien wpisac praca produkcyjn np poniedzialek - glowne krycia, sprzedaz tucznika, wtorek grupwaonie, sroda szczepienia czwartek odsad piatek przezut warchlata na tuczarnie sobota zasiedlenie potodowki
+
+w dzien przemieszczen loch - info, nie paszowac na halach
+
+
+codziennie info z mieszalni pasz
+
+Produkcja dzisiaj: na zolto w trakcie produkcji, na zielono zasypane
+
+Dzisiaj sprzedaz tucznika? to chyba tak/nie
+
+Dzisiaj sprzedaz warchlaka?
+
+
+Dzisiaj upadek tucznika, warchlaka, lochy, upadki w prosietach
+
+
+transport tucznika na sprzedaz
+
+
+CZy przepuszczona byla dzisiaj gnojowica
+
+Zapchanie gnojowicy? Tak, nie + uwagi (np hala Alicji)
+
+
+Awarie do zgloszenia
+
+
+Braki w socjalnym
+
+
+
+
+1. Karmienie na hali B
+1. karmienie na hali b
+2. obstukiwanie rur
+3. garniecie na szybko pod lochami
+4. paszowanie
+5. pojenie loch
+6. zgarniecie odchodow pod ruszt
+7. awaria? tak/nie + adnotacja
+
+8 chora locha? tak/nie + adnotacja + numer lochy
+
+9. nie wyjadanie paszy? tak /nie + gdzie?
+
+
+II karmienie na hali A
+Jak wyzej
+
+tu wyzej to chodzi chyba o taka liste kontrolna przy karmieniu na hali A, B, C etc
+
+
+Karmienie na porodowce
+Porodowka 1.
+1. zadanie paszy lochomo wg krzywej
+2. sprzatniecie odchodow loch
+3. problem z locha tak/nie + stanowisko + uwagi
+4. problem z prosieciem tak/nie + kojec + uwagi
+
+5. temperatura na hali
+6. sprzatanie pod daszkami
+7. posypka plus trociny
+8. awaria?
+
+porodowka nr 2 - jak wyzej etc
+
+Hala 1.
+1. Spuszczanie paszy
+2. obstukanie
+3. zgarniecie odchodow
+4. zadanie pasze loszkom do krycia LK z worka
+
+zaopatrzenie hali w deske, grzechotke, zgarniacz, lopata
+
+zaopatrzenie lochy chorej
+lochy w izolatce
+1. woda
+2. pasza - zjadla wczesniej tak/nie ile. sa odchody, posypka, trociny
+14:00-22:00
+
+pozostala praca z 1 zmiany? tak/nie
+karmienie? gdzie
+pojenie? gdzie
+awaria
+obchod na tuczarni
+tuczarnia 1.
+tuczarnia 2.
+tuczarnia 3.
+
+tuczania 1:
+
+paszowanie tak nie
+awaraia
+chore zwierzeta tak nie adnotacje
+
+tuczarnia 2:
+jak wyzej
+
+tuczarnia 3:
+jak wyzej
+
+praca na obiektach
+chlewnie loch
+tuczarnie
+
+sprzedaz? tak nie
+do kogo nazwisko1/nazwisko2/nazwisko3
+ile sztuk
+ile ton
+
+skad sprzedaz sztuk/lokalizacja/urodzone
+
+obchod i prace codzienne na tuczarniach
+T3
+D11
+dosypanie paszy tucznikom bez zsypu paszowego
+chore zwierze tak nie
+co dolega
+
+awaria
+rodzaj paszy: starter/grower/finisher
+dostepnosc do wody tak nie
+
+
+liczba zwierzat - bardzo wazne z uwagi na wymagania piwet
+
+
+do obchodu w tuczarniach w kazdych drzwiach
+wentylator ok/inne
+woda ok/inne
+karmniki ok/inne
+Awarie
+
+temperatury w komorach
+
+
+standard male swinki 23 stopnie
+srednie 21-22
+duze (finisher) 19-20
+
+do kazdego zadania instrukcja - w niej opis jak ma wygladac przebieg zadania
+np trucie much na chlewniach loch. Do wykonania zadania potrzebujesz ochrona wlasna rekawiczki jednorazowe, okulary maseczak. opryskujemy sciany by zwierzeta nei mialy dostepu do preparatu
+
+
+gdy wchodzimy w przycisk w tym tygondiu na czerwono do zrobienia na zielono zrobione na niebiesko zamrozone przez administratora lub wlansie wykonujacego
+
+widok gdy czerwone zadanie - zadanie do zrobienia, pkt uwagi
+widok gdy zrobione zadanie - zadanie, zrobione przez Robert T. - otrzymane punkty - uwagi
+
+administrator moze zobaczyc sume punktow uzytkownikow
+
+Oddzielna zakladka dla akuszera
+
+oddzielna zakladka dla zootechnika
+
+mozna zobaczyc wszystkie zadania wykonanie przez danego uzytkownika w danym czasie
+
+
+
+jeszcze kategorie:
+dezynsekcja, deratyzacja, dezynfekcja, porzatki, ochrona wejsc
+

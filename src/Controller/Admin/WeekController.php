@@ -140,10 +140,16 @@ class WeekController extends AbstractController
     }
 
     #[Route('/task/{id}/done', name: 'task_done', methods: ['POST'])]
-    public function taskDone(TaskInstance $task): Response
+    public function taskDone(TaskInstance $task, Request $request): Response
     {
+        $data = json_decode($request->getContent(), true) ?? [];
+
         $task->setStatus('DONE');
         $task->setDoneAt(new \DateTimeImmutable());
+
+        if (isset($data['execution_payload'])) {
+            $task->setExecutionPayload($data['execution_payload']);
+        }
 
         $this->scoringService->addPointsForTask($task);
 
@@ -153,7 +159,10 @@ class WeekController extends AbstractController
             entityType: 'task_instance',
             entityId: (string) $task->getId(),
             eventType: 'task_instance.done',
-            payload: ['name' => $task->getNameSnapshot()]
+            payload: array_merge(
+                ['name' => $task->getNameSnapshot()],
+                isset($data['execution_payload']) ? ['execution_payload' => $data['execution_payload']] : []
+            )
         );
 
         return new JsonResponse(['status' => 'DONE']);

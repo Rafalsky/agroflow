@@ -46,6 +46,9 @@ class TaskInstance
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Worker $worker = null;
 
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $executionPayload = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -155,6 +158,18 @@ class TaskInstance
     public function setWorker(?Worker $worker): static
     {
         $this->worker = $worker;
+
+        return $this;
+    }
+
+    public function getExecutionPayload(): ?array
+    {
+        return $this->executionPayload;
+    }
+
+    public function setExecutionPayload(?array $executionPayload): static
+    {
+        $this->executionPayload = $executionPayload;
 
         return $this;
     }

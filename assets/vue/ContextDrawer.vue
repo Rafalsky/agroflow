@@ -36,6 +36,26 @@
               </div>
             </div>
 
+            <!-- Checklist Widget -->
+            <ChecklistWidget 
+                v-if="entity.data.widget_type === 'checklist' && entity.data.widget_schema" 
+                :schema="entity.data.widget_schema" 
+                :payload="entity.data.execution_payload"
+                :isReadOnly="entity.data.status === 'DONE'"
+                @update:payload="currentPayload = $event"
+                @validity="isPayloadValid = $event"
+            />
+
+            <!-- Temperature Widget -->
+            <TemperatureWidget 
+                v-else-if="entity.data.widget_type === 'temperature' && entity.data.widget_schema" 
+                :schema="entity.data.widget_schema" 
+                :payload="entity.data.execution_payload"
+                :isReadOnly="entity.data.status === 'DONE'"
+                @update:payload="currentPayload = $event"
+                @validity="isPayloadValid = $event"
+            />
+
             <!-- Task Audit -->
             <div>
               <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic">Historia Operacji (Audit)</p>
@@ -59,8 +79,8 @@
             </div>
 
             <div class="pt-8 border-t border-slate-100 flex gap-4">
-              <button @click="$emit('toggle-task', entity.data)" v-if="entity.data.status === 'DONE'" class="flex-1 bg-white border border-slate-200 text-slate-400 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:text-slate-900 transition-colors">Cofnij Wykonanie</button>
-              <button @click="$emit('toggle-task', entity.data)" v-else class="flex-1 bg-orange-600 text-white py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-sm hover:bg-orange-700 transition-colors">Oznacz jako Wykonane</button>
+              <button @click="$emit('toggle-task', entity.data, null)" v-if="entity.data.status === 'DONE'" class="flex-1 bg-white border border-slate-200 text-slate-400 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:text-slate-900 transition-colors">Cofnij Wykonanie</button>
+              <button @click="$emit('toggle-task', entity.data, currentPayload)" v-else :disabled="!isPayloadValid" class="flex-1 bg-orange-600 text-white py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-sm hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Oznacz jako Wykonane</button>
               <button @click="$emit('delete', entity.data)" class="px-6 py-4 border border-rose-100 text-rose-500 rounded-xl hover:bg-rose-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -116,7 +136,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
+import ChecklistWidget from './ChecklistWidget.vue';
+import TemperatureWidget from './TemperatureWidget.vue';
 
 const props = defineProps({
   entity: { type: Object, default: null },
@@ -134,5 +156,20 @@ const title = computed(() => {
     case 'worker': return props.entity.data ? 'Zarządzanie Pracownikiem' : 'Nowy Pracownik';
     default: return 'Szczegóły';
   }
+});
+
+const currentPayload = ref(null);
+const isPayloadValid = ref(true);
+
+watch(() => props.entity, (newVal) => {
+    currentPayload.value = null;
+    isPayloadValid.value = true;
+    if (newVal && newVal.data) {
+        if (newVal.data.widget_type === 'checklist') {
+            isPayloadValid.value = newVal.data.status === 'DONE';
+        } else if (newVal.data.widget_type === 'temperature') {
+            isPayloadValid.value = newVal.data.status === 'DONE';
+        }
+    }
 });
 </script>

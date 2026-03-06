@@ -197,7 +197,7 @@ function closeDrawer() {
     drawerEntity.value = null;
 }
 
-async function toggleTask(task) {
+async function toggleTask(task, payload = null) {
   if (task.processing) return;
 
   const isDone = task.status === 'DONE';
@@ -207,7 +207,13 @@ async function toggleTask(task) {
   task.processing = true;
 
   try {
-    const response = await fetch(url, { method: 'POST' });
+    const fetchOptions = { method: 'POST' };
+    if (payload && !isDone) {
+        fetchOptions.headers = { 'Content-Type': 'application/json' };
+        fetchOptions.body = JSON.stringify({ execution_payload: payload });
+    }
+
+    const response = await fetch(url, fetchOptions);
     if (!response.ok) throw new Error('API Error');
     
     // Update local state (optimistic)
@@ -215,6 +221,9 @@ async function toggleTask(task) {
     task.status = isDone ? 'PENDING' : 'DONE';
     
     if (task.status === 'DONE') {
+      if (payload) {
+          task.execution_payload = payload;
+      }
       task.doneAt = new Date().toISOString().replace('T', ' ').slice(0, 19);
       if (oldStatus !== 'DONE') weekData.value.teamTotal += task.points;
     } else {

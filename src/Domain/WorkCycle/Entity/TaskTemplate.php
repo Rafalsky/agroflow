@@ -39,6 +39,15 @@ class TaskTemplate
     #[ORM\JoinColumn(nullable: true)]
     private ?Worker $defaultWorker = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $instruction = null;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $widgetType = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $widgetSchema = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +145,42 @@ class TaskTemplate
     public function setDefaultWorker(?Worker $defaultWorker): static
     {
         $this->defaultWorker = $defaultWorker;
+
+        return $this;
+    }
+
+    public function getInstruction(): ?string
+    {
+        return $this->instruction;
+    }
+
+    public function setInstruction(?string $instruction): static
+    {
+        $this->instruction = $instruction;
+
+        return $this;
+    }
+
+    public function getWidgetType(): ?string
+    {
+        return $this->widgetType;
+    }
+
+    public function setWidgetType(?string $widgetType): static
+    {
+        $this->widgetType = $widgetType;
+
+        return $this;
+    }
+
+    public function getWidgetSchema(): ?array
+    {
+        return $this->widgetSchema;
+    }
+
+    public function setWidgetSchema(?array $widgetSchema): static
+    {
+        $this->widgetSchema = $widgetSchema;
 
         return $this;
     }

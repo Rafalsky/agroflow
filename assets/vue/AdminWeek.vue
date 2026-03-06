@@ -56,7 +56,7 @@
                 @click.stop="$emit('toggle-task', task)" 
                 :disabled="task.processing"
                 class="px-4 py-1.5 text-[9px] font-black rounded-md transition-all uppercase tracking-widest"
-                :class="task.status === 'DONE' ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-400 border border-slate-200'"
+                :class="task.status === 'DONE' ? 'bg-emerald-600 text-white' : 'bg-rose-500 text-white hover:bg-rose-600 border border-transparent'"
             >
               {{ task.processing ? '...' : (task.status === 'DONE' ? 'Cofnij ✓' : 'Zrób') }}
             </button>
@@ -93,10 +93,13 @@
           >
             <!-- Compact Task Header -->
             <div class="flex justify-between items-start gap-2">
-              <span class="font-bold text-slate-900 leading-tight italic line-clamp-2" :class="{'line-through text-slate-300': task.status === 'DONE'}">
+              <span class="font-bold text-slate-900 leading-tight italic line-clamp-2" :class="{'line-through text-slate-400': task.status === 'DONE'}">
                 {{ task.name }}
               </span>
-              <span class="text-[8px] font-black bg-slate-50 text-slate-600 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
+              <span v-if="task.status === 'DONE'" class="text-[8px] font-black bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
+                +{{ task.points }} pkt
+              </span>
+              <span v-else class="text-[8px] font-black bg-slate-50 text-slate-600 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
                 {{ task.points }}
               </span>
             </div>
@@ -111,7 +114,7 @@
                 @click.stop="$emit('toggle-task', task)" 
                 :disabled="task.processing"
                 class="px-2 py-1 rounded text-[8px] font-black transition-all uppercase tracking-widest"
-                :class="task.status === 'DONE' ? 'bg-orange-600 text-white' : 'bg-slate-50 text-slate-400 border border-slate-100'"
+                :class="task.status === 'DONE' ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-rose-500 hover:bg-rose-600 text-white'"
               >
                 {{ task.processing ? '...' : (task.status === 'DONE' ? '✓' : 'Zrób') }}
               </button>
@@ -187,11 +190,11 @@ const getTasksForDay = (day) => {
 
 const getTaskCardClass = (task) => {
   if (task.status === 'DONE') {
-    return 'bg-slate-50 border-slate-100 opacity-60';
+    return 'bg-emerald-50 border-emerald-200 opacity-70';
   } else if (task.priority === 'URGENT') {
-    return 'bg-white border-red-200 shadow-sm';
+    return 'bg-rose-50 border-rose-500 shadow-sm shadow-rose-100';
   } else {
-    return 'bg-white border-slate-200 shadow-sm';
+    return 'bg-white border-rose-200 border-l-4 border-l-rose-500 shadow-sm';
   }
 };
 
