@@ -31,3 +31,10 @@ Wszelkie teksty informacyjne, procedury BHP, wyposażenie hali czy wytyczne do z
 Każdy feature ma proof of concept w postaci:
 1. Testu e2e cucumber z jawnymi stepami
 2. Dowodem dla użytkownika w postaci zrzutu ekranu funkcjonalności, kroków do weryfikacji poprawnej implementacji czy pełnoprawnym dowodem
+
+7. **Mobile First jako nadrzędny standard UX**
+Interfejs projektuj i implementuj najpierw dla telefonu (szerokość 360-430 px), bo to główne urządzenie pracownika na hali. Dopiero potem rozszerzaj układ na tablet/desktop.
+- Domyślny layout i komponenty mają być zoptymalizowane pod `touch` (minimalne cele dotyku 44x44 px, duże CTA, brak hover-only interakcji).
+- W CSS/Tailwind najpierw definiuj styl bazowy mobilny, a breakpointy (`md:`, `lg:`) traktuj wyłącznie jako rozszerzenie.
+- Krytyczne akcje dzienne (DONE/UNDO, otwarcie widgetu, zapis) muszą być dostępne jedną ręką bez precyzyjnego celowania kursorem.
+- Modale blokujące ekran na telefonie zastępuj wzorcem `ContextDrawer`/bottom sheet lub pełnym widokiem mobilnym.

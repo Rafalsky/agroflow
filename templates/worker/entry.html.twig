@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wejście Pracownika | AgroFlow{% endblock %}
+
+{% block body %}
+<div class="min-h-[80vh] flex flex-col items-center justify-center px-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-8 md:p-10">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl font-black text-slate-900 italic uppercase tracking-tighter mb-2">Wejście Pracownika</h1>
+            <p class="text-slate-500 font-medium">Podaj swój unikalny kod dostępu, aby rozpocząć obchód.</p>
+        </div>
+
+        {% for message in app.flashes('error') %}
+            <div class="bg-rose-50 border-l-4 border-rose-500 p-4 mb-6 rounded-r-lg">
+                <p class="text-sm font-bold text-rose-700 italic">{{ message }}</p>
+            </div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('worker_entry') }}" class="space-y-6">
+            <div>
+                <label for="access_token" class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 italic">Twój Kod Dostępu</label>
+                <input type="text" id="access_token" name="access_token" required
+                       class="w-full text-center text-xl font-mono font-black border-2 border-slate-200 rounded-xl px-4 py-4 focus:ring-0 focus:border-orange-500 transition-colors uppercase tracking-widest"
+                       placeholder="NP. AB12CD34"
+                       autocomplete="off">
+            </div>
+
+            <button type="submit" class="w-full bg-orange-600 text-white font-black uppercase tracking-widest text-sm py-4 rounded-xl shadow-lg shadow-orange-600/20 hover:bg-orange-700 hover:shadow-xl hover:shadow-orange-600/30 transition-all active:scale-[0.98]">
+                Wejdź do systemu
+            </button>
+        </form>
+
+        <div class="mt-8 pt-8 border-t border-slate-100 text-center">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Nie znasz kodu? Zapytaj zootechnika.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

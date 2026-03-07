@@ -7,6 +7,7 @@ use App\Domain\Scoring\Service\ScoringService;
 use App\Domain\WorkCycle\Entity\ProductionWeek;
 use App\Domain\WorkCycle\Entity\TaskInstance;
 use App\Domain\WorkCycle\Entity\Worker;
+use App\Domain\Welfare\Service\WelfareService;
 use App\Domain\WorkCycle\Service\WeekGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ class WeekController extends AbstractController
         private EntityManagerInterface $entityManager,
         private WeekGenerator $weekGenerator,
         private AuditLogger $auditLogger,
-        private ScoringService $scoringService
+        private ScoringService $scoringService,
+        private WelfareService $welfareService
     ) {
     }
 
@@ -136,7 +138,7 @@ class WeekController extends AbstractController
 
         $this->addFlash('success', "Wygenerowano {$count} zadań cyklicznych.");
 
-        return $this->redirectToRoute('admin_week_show', ['year' => $year, 'week' => $week]);
+        return $this->redirectToRoute('admin_dashboard');
     }
 
     #[Route('/task/{id}/done', name: 'task_done', methods: ['POST'])]
@@ -149,6 +151,24 @@ class WeekController extends AbstractController
 
         if (isset($data['execution_payload'])) {
             $task->setExecutionPayload($data['execution_payload']);
+
+            // Special handling for PIWET deaths widget
+            if ($task->getTemplate() && $task->getTemplate()->getWidgetType() === 'welfare_death') {
+                $payload = $data['execution_payload'];
+                $amount = (int) ($payload['amount'] ?? 0);
+                if ($amount > 0) {
+                    $category = $payload['category'] ?? 'fatteners';
+                    $notes = $payload['notes'] ?? 'Zgłoszono podczas zadania';
+                    // We reduce the stock
+                    $this->welfareService->applyChange(
+                        category: $category,
+                        delta: -$amount,
+                        reason: 'DEATH',
+                        note: $notes,
+                        worker: $task->getWorker()
+                    );
+                }
+            }
         }
 
         $this->scoringService->addPointsForTask($task);
@@ -193,7 +213,7 @@ class WeekController extends AbstractController
         $productionWeek = $this->weekGenerator->getOrCreateWeek($year, $week);
 
         if ($productionWeek->getStatus() !== 'OPEN') {
-            return $this->redirectToRoute('admin_week_show', ['year' => $year, 'week' => $week]);
+            return $this->redirectToRoute('admin_dashboard');
         }
 
         $productionWeek->setStatus('CLOSED');
@@ -207,7 +227,7 @@ class WeekController extends AbstractController
             eventType: 'week.closed'
         );
 
-        return $this->redirectToRoute('admin_week_show', ['year' => $year, 'week' => $week]);
+        return $this->redirectToRoute('admin_dashboard');
     }
 
     #[Route('/task/{id}/assign', name: 'task_assign', methods: ['POST'])]

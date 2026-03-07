@@ -22,6 +22,12 @@ Poniżej znajduje się kompletna derywacja zadań, raportów oraz reguł interfe
 - [ ] **Kategorie Pracy**: Dezynsekcja, deratyzacja, dezynfekcja, porządki, ochrona wejść.
 - [ ] **Interfejs UI**: Zadania czerwone (PENDING), zielone (DONE), *niebieskie (FROZEN - zamrożone/zawieszone)*. Wyświetlanie na karcie wykonawcy (Robert T.) i uwag. Dodatkowe widoki dla Akuszera i Zootechnika, filtrowanie historii wykonawcy.
 
+### 1.1 Priorytet mobile-first (wymóg produktowy)
+- [ ] Wszystkie kluczowe ścieżki wykonawcy muszą być projektowane najpierw pod telefon (360-430 px), a dopiero potem rozszerzane na desktop.
+- [ ] DONE/UNDO, otwieranie widgetów i zapis formularzy muszą być wygodne w obsłudze jedną ręką.
+- [ ] Elementy dotykowe w UI: minimum 44x44 px; brak krytycznych akcji wymagających hover.
+- [ ] Widoki desktopowe nie mogą wprowadzać alternatywnej logiki biznesowej, tylko inny układ (spójność mobile vs desktop).
+
 ---
 
 ## 2. Podział: Feature vs Wpis w Bazie (Kategoryzacja Implementacyjna)

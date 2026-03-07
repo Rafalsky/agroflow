@@ -76,6 +76,12 @@
         }
     },
     "require-dev": {
+        "behat/behat": "^3.29",
+        "dbrekelmans/bdi": "^1.4",
+        "friends-of-behat/mink-extension": "^2.7",
+        "friends-of-behat/symfony-extension": "^2.6",
+        "phpunit/phpunit": "^13.0",
+        "robertfausk/behat-panther-extension": "^1.2",
         "symfony/maker-bundle": "^1.66"
     }
 }

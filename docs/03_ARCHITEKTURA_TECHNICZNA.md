@@ -232,6 +232,20 @@ Vue:
 
 Nie budujemy wielkich, osobnych SPA w pierwszych fazach rozbudowy modułów operacyjnych (żeby zachować prostotę UX dla pracownika na hali). Zamiast tego polegamy na widgetach.
 
+## 8.3 Mobile-first jako wymaganie architektury UI
+
+Frontend projektujemy od warstwy mobilnej:
+
+* bazowe style i układy definiujemy dla telefonów (najpierw bez breakpointów),
+* `md`/`lg` służą wyłącznie do rozszerzenia widoku na większe ekrany,
+* komponenty krytyczne biznesowo muszą działać w obsłudze dotykowej bez precyzyjnej nawigacji kursorem,
+* dla interakcji kontekstowych preferujemy `ContextDrawer` / bottom sheet zamiast ciężkich modali desktopowych.
+
+Konsekwencja architektoniczna:
+
+* komponenty Vue muszą mieć warianty mobilne jako domyślne API komponentu,
+* testy e2e dla kluczowych flow obejmują viewport mobilny jako scenariusz bazowy.
+
 ---
 
 # 9. API

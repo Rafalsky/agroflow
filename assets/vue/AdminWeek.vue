@@ -83,43 +83,50 @@
           </button>
         </div>
 
-        <div class="p-2 space-y-2 flex-1">
-          <div 
-            v-for="task in getTasksForDay(day)" 
-            :key="task.id" 
-            @click="$emit('open-task', task)"
-            class="p-2 border rounded-lg text-xs flex flex-col gap-2 transition-colors shadow-sm mb-1 cursor-pointer group hover:border-orange-200 relative"
-            :class="getTaskCardClass(task)"
-          >
-            <!-- Compact Task Header -->
-            <div class="flex justify-between items-start gap-2">
-              <span class="font-bold text-slate-900 leading-tight italic line-clamp-2" :class="{'line-through text-slate-400': task.status === 'DONE'}">
-                {{ task.name }}
-              </span>
-              <span v-if="task.status === 'DONE'" class="text-[8px] font-black bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
-                +{{ task.points }} pkt
-              </span>
-              <span v-else class="text-[8px] font-black bg-slate-50 text-slate-600 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
-                {{ task.points }}
-              </span>
-            </div>
+        <div class="p-2 space-y-4 flex-1">
+          <template v-for="(blockTasks, category) in getGroupedTasksForDay(day)" :key="category">
+            <div class="time-block">
+              <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 border-b border-slate-100 pb-1">{{ category }}</h4>
+              <div class="space-y-2">
+                <div 
+                  v-for="task in blockTasks" 
+                  :key="task.id" 
+                  @click="$emit('open-task', task)"
+                  class="p-2 border rounded-lg text-xs flex flex-col gap-2 transition-all shadow-sm mb-1 cursor-pointer group hover:border-blue-300 relative"
+                  :class="getTaskCardClass(task)"
+                >
+                  <!-- Compact Task Header -->
+                  <div class="flex justify-between items-start gap-2">
+                    <span class="font-bold text-slate-900 leading-tight italic line-clamp-2" :class="{'line-through text-slate-400': task.status === 'DONE'}">
+                      {{ task.name }}
+                    </span>
+                    <span v-if="task.status === 'DONE'" class="text-[8px] font-black bg-emerald-100/50 text-emerald-700 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
+                      +{{ task.points }} pkt
+                    </span>
+                    <span v-else class="text-[8px] font-black bg-slate-50 text-slate-600 px-1 py-0.5 rounded shadow-sm whitespace-nowrap uppercase">
+                      {{ task.points }}
+                    </span>
+                  </div>
 
-            <div class="flex items-center justify-between mt-1">
-               <div class="flex gap-1 items-center">
-                  <div v-if="task.priority === 'URGENT'" class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></div>
-                  <div v-if="task.worker_name" class="text-[8px] font-black text-blue-600 uppercase">👤 {{ task.worker_name }}</div>
-               </div>
-               
-               <button 
-                @click.stop="$emit('toggle-task', task)" 
-                :disabled="task.processing"
-                class="px-2 py-1 rounded text-[8px] font-black transition-all uppercase tracking-widest"
-                :class="task.status === 'DONE' ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-rose-500 hover:bg-rose-600 text-white'"
-              >
-                {{ task.processing ? '...' : (task.status === 'DONE' ? '✓' : 'Zrób') }}
-              </button>
+                  <div class="flex items-center justify-between mt-1">
+                     <div class="flex gap-1 items-center">
+                        <div v-if="task.priority === 'URGENT'" class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></div>
+                        <div v-if="task.worker_name" class="text-[8px] font-black text-blue-600 uppercase">👤 {{ task.worker_name }}</div>
+                     </div>
+                     
+                     <button 
+                      @click.stop="handleTaskAction(task)" 
+                      :disabled="task.processing"
+                      class="px-2 py-1 rounded text-[8px] font-black transition-all uppercase tracking-widest"
+                      :class="getTaskButtonClass(task)"
+                    >
+                      {{ task.processing ? '...' : (task.status === 'DONE' ? '✓' : (task.widgetType ? 'OTWÓRZ' : 'ZRÓB')) }}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </template>
           
           <!-- Subtle Empty State -->
           <div v-if="getTasksForDay(day).length === 0" class="h-full flex items-center justify-center opacity-20">
@@ -183,26 +190,63 @@ const props = defineProps({
 });
 
 const weekDays = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela'];
+const categoryOrder = ['Codzienne', 'Produkcja', 'Welfare', 'Sprzedaż', 'Bioasekuracja', 'Inne'];
 
 const getTasksForDay = (day) => {
   return props.tasks.filter(t => t.weekday === day);
 };
 
+const getGroupedTasksForDay = (day) => {
+  const dayTasks = getTasksForDay(day);
+  const grouped = {};
+  
+  dayTasks.forEach(task => {
+    const cat = task.category || 'Inne';
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(task);
+  });
+
+  const orderedGroups = {};
+  categoryOrder.forEach(cat => {
+    if (grouped[cat]) {
+      orderedGroups[cat] = grouped[cat];
+    }
+  });
+
+  Object.keys(grouped).forEach(cat => {
+    if (!orderedGroups[cat]) {
+      orderedGroups[cat] = grouped[cat];
+    }
+  });
+
+  return orderedGroups;
+};
+
 const getTaskCardClass = (task) => {
   if (task.status === 'DONE') {
-    return 'bg-emerald-50 border-emerald-200 opacity-70';
+    return 'bg-slate-50 border-slate-100 opacity-60 grayscale';
   } else if (task.priority === 'URGENT') {
-    return 'bg-rose-50 border-rose-500 shadow-sm shadow-rose-100';
+    return 'bg-orange-50 border-orange-200 border-l-4 border-l-orange-500 shadow-sm shadow-orange-100/50';
   } else {
-    return 'bg-white border-rose-200 border-l-4 border-l-rose-500 shadow-sm';
+    return 'bg-white border-slate-200 border-l-4 border-l-blue-400 shadow-sm';
   }
 };
 
 const getTaskButtonClass = (task) => {
   if (task.status === 'DONE') {
-    return 'bg-slate-100 text-slate-400 hover:bg-slate-200';
-  } else {
+    return 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200';
+  } else if (task.priority === 'URGENT') {
     return 'bg-orange-600 text-white hover:bg-orange-700';
+  } else {
+    return 'bg-slate-800 text-white hover:bg-slate-900 border border-transparent';
+  }
+};
+
+const handleTaskAction = (task) => {
+  if (task.status === 'DONE' || task.widgetType) {
+    emit('open-task', task);
+  } else {
+    emit('toggle-task', task);
   }
 };
 </script>

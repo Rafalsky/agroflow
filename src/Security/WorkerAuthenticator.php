@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Domain\WorkCycle\Entity\Worker;
 use App\Domain\WorkCycle\Repository\WorkerRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +20,13 @@ class WorkerAuthenticator extends AbstractAuthenticator
     public function __construct(
         private WorkerRepository $workerRepository,
         private RouterInterface $router
-    ) {
+        )
+    {
     }
 
     public function supports(Request $request): ?bool
     {
-        // Support routes that have accessToken parameter
+        // Support routes that have accessToken parameter AND we aren't already authenticated
         return $request->attributes->has('accessToken');
     }
 
@@ -39,20 +39,28 @@ class WorkerAuthenticator extends AbstractAuthenticator
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($token, function ($token) {
-                $worker = $this->workerRepository->findOneBy(['accessToken' => $token]);
+            new UserBadge($token, function ($userIdentifier) {
+            $worker = $this->workerRepository->findOneBy(['accessToken' => $userIdentifier]);
 
-                if (!$worker) {
-                    throw new CustomUserMessageAuthenticationException('Invalid access token.');
+            if (!$worker) {
+                // Debug log: checking what is actually in the DB at this moment
+                $allWorkers = $this->workerRepository->findAll();
+                $debugInfo = "Looking for token: {$userIdentifier}. Found " . count($allWorkers) . " workers in DB.\n";
+                foreach ($allWorkers as $w) {
+                    $debugInfo .= "- {$w->getName()} ({$w->getAccessToken()})\n";
                 }
+                file_put_contents('/tmp/agroflow_auth_debug.txt', $debugInfo);
 
-                if (!$worker->isActive()) {
-                    throw new CustomUserMessageAuthenticationException('Worker account is inactive.');
-                }
+                throw new CustomUserMessageAuthenticationException('Invalid access token.');
+            }
 
-                return $worker;
-            })
-        );
+            if (!$worker->isActive()) {
+                throw new CustomUserMessageAuthenticationException('Worker account is inactive.');
+            }
+
+            return $worker;
+        })
+            );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -63,6 +71,7 @@ class WorkerAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new Response('Authentication failed: ' . $exception->getMessage(), Response::HTTP_FORBIDDEN);
+        // If they fail, redirect them to the entry page
+        return new RedirectResponse($this->router->generate('worker_entry'));
     }
 }

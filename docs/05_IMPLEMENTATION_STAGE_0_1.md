@@ -24,7 +24,7 @@ Minimalne paczki PHP (CLI):
 - ext-curl
 - unzip
 
-Dodatkowo Node + Yarn.
+ADodatkowo Node + Yarn.
 
 ---
 

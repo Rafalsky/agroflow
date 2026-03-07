@@ -137,6 +137,22 @@ Akcja: oznacz jako wykonane / cofnięcie
 
 Interfejs ma być maksymalnie prosty, czytelny, bez nadmiaru funkcji.
 
+7.1 Priorytet urządzeń mobilnych (mobile-first)
+
+Głównym środowiskiem pracy użytkownika końcowego jest telefon na hali.
+
+Dlatego:
+
+projekt bazowy UI powstaje najpierw dla smartfona (360-430 px),
+
+desktop i tablet są warstwą rozszerzającą (pełne RWD, ale wtórne do mobile),
+
+krytyczne operacje (DONE/UNDO, zgłoszenie incydentu, wpis temperatury/upadku) muszą być możliwe do wykonania jedną ręką,
+
+interakcje nie mogą zależeć wyłącznie od hovera/myszki,
+
+komponenty interaktywne mają być "touch-friendly" (duże strefy kliku, czytelna typografia, niski próg pomyłek).
+
 8. Audit / Historia zdarzeń
 
 Od pierwszego etapu system prowadzi rejestr zdarzeń biznesowych.

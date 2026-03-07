@@ -56,6 +56,16 @@
                 @validity="isPayloadValid = $event"
             />
 
+            <!-- Welfare Death Widget -->
+            <WelfareDeathWidget 
+                v-else-if="entity.data.widget_type === 'welfare_death'" 
+                :schema="entity.data.widget_schema || {}" 
+                :payload="entity.data.execution_payload"
+                :isReadOnly="entity.data.status === 'DONE'"
+                @update:payload="currentPayload = $event"
+                @validity="isPayloadValid = $event"
+            />
+
             <!-- Task Audit -->
             <div>
               <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic">Historia Operacji (Audit)</p>
@@ -139,6 +149,7 @@
 import { computed, ref, watch } from 'vue';
 import ChecklistWidget from './ChecklistWidget.vue';
 import TemperatureWidget from './TemperatureWidget.vue';
+import WelfareDeathWidget from './WelfareDeathWidget.vue';
 
 const props = defineProps({
   entity: { type: Object, default: null },
@@ -168,6 +179,8 @@ watch(() => props.entity, (newVal) => {
         if (newVal.data.widget_type === 'checklist') {
             isPayloadValid.value = newVal.data.status === 'DONE';
         } else if (newVal.data.widget_type === 'temperature') {
+            isPayloadValid.value = newVal.data.status === 'DONE';
+        } else if (newVal.data.widget_type === 'welfare_death') {
             isPayloadValid.value = newVal.data.status === 'DONE';
         }
     }

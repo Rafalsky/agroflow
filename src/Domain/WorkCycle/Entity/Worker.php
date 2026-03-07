@@ -136,4 +136,24 @@ class Worker implements UserInterface
     {
         // Nothing to erase - we use access tokens
     }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'accessToken' => $this->accessToken,
+            'name' => $this->name,
+            'shortName' => $this->shortName,
+            'active' => $this->active,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'] ?? null;
+        $this->accessToken = $data['accessToken'] ?? null;
+        $this->name = $data['name'] ?? null;
+        $this->shortName = $data['shortName'] ?? null;
+        $this->active = $data['active'] ?? true;
+    }
 }

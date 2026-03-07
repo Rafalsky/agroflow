@@ -17,6 +17,16 @@ kryteria ukończenia (Definition of Done)
 
 milestone’y (kolejne kroki)
 
+Wymaganie przekrojowe (dotyczy wszystkich stage'y)
+
+Mobile-first jest domyślnym podejściem projektowym i implementacyjnym:
+
+najpierw projekt i testy dla telefonu (viewport 360-430 px),
+
+następnie rozszerzenia na tablet/desktop,
+
+Definition of Done dla każdego stage obejmuje stabilne działanie kluczowych flow na urządzeniu mobilnym (dotyk).
+
 Stage 0 — Fundament projektu (Foundation)
 Cel
 
@@ -111,6 +121,8 @@ zmiany template nie psują instancji (snapshot istnieje)
 
 potwierdzony test E2E (Cucumber/Gherkin) oraz wizualny dowód poprawnego działania ficzera (PoC)
 
+kluczowe operacje (DONE/UNDO, przejścia między dniami) działają poprawnie i czytelnie w widoku mobilnym
+
 Milestones
 
 Encje + migracje: production_week, task_template, task_instance
@@ -161,6 +173,8 @@ istnieje możliwość dezaktywacji workera (token przestaje działać)
 audit rejestruje “task done by worker”
 
 potwierdzony test E2E oraz wizualny dowód poprawnego działania ficzera
+
+worker flow jest zoptymalizowany pod obsługę jedną ręką na telefonie
 
 Milestones
 

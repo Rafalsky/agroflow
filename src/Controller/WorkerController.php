@@ -11,6 +11,7 @@ use App\Domain\WorkCycle\Repository\TaskInstanceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -27,7 +28,7 @@ class WorkerController extends AbstractController
     ) {
     }
 
-    #[Route('/{accessToken}', name: 'worker_login')]
+    #[Route('/{accessToken}', name: 'worker_login', priority: -10)]
     public function login(string $accessToken): Response
     {
         // Authenticator handles the login, we just redirect
@@ -40,20 +41,24 @@ class WorkerController extends AbstractController
     public function tasks(#[CurrentUser] ?Worker $worker): Response
     {
         if (!$worker) {
-            return $this->redirectToRoute('worker_login', ['accessToken' => 'invalid']);
+            return $this->redirectToRoute('worker_entry');
         }
 
         $now = new \DateTimeImmutable();
         $currentYear = (int) $now->format('o');
         $currentWeekNumber = (int) $now->format('W');
+        $todayStart = $now->setTime(0, 0, 0);
 
-        // Fetch ALL pending tasks for the team
-        $allPendingTasks = $this->entityManager->createQueryBuilder()
+        // Fetch ALL pending tasks for the team, plus any tasks finished today
+        $allTasks = $this->entityManager->createQueryBuilder()
             ->select('t', 'w')
             ->from(TaskInstance::class, 't')
             ->join('t.week', 'w')
             ->where('t.status = :pending')
+            ->orWhere('t.status = :done AND t.doneAt >= :todayStart')
             ->setParameter('pending', 'PENDING')
+            ->setParameter('done', 'DONE')
+            ->setParameter('todayStart', $todayStart)
             ->orderBy('w.year', 'ASC')
             ->addOrderBy('w.weekNumber', 'ASC')
             ->addOrderBy('t.weekdaySnapshot', 'ASC')
@@ -76,8 +81,12 @@ class WorkerController extends AbstractController
                 'year' => $week->getYear(),
                 'status' => $t->getStatus(),
                 'isOverdue' => $isOverdue,
+                'instruction' => $t->getTemplate()?->getInstruction(),
+                'widget_type' => $t->getTemplate()?->getWidgetType(),
+                'widget_schema' => $t->getTemplate()?->getWidgetSchema(),
+                'execution_payload' => $t->getExecutionPayload(),
             ];
-        }, $allPendingTasks);
+        }, $allTasks);
 
         $totalPoints = $this->scoreRepository->getTotalPoints($worker);
         $weekPoints = $this->scoreRepository->getWorkerTotalForWeek($worker, $currentYear, $currentWeekNumber);
@@ -91,13 +100,18 @@ class WorkerController extends AbstractController
     }
 
     #[Route('/task/{id}/done', name: 'worker_task_done', methods: ['POST'])]
-    public function markDone(TaskInstance $task, #[CurrentUser] ?Worker $worker): Response
+    public function markDone(TaskInstance $task, #[CurrentUser] ?Worker $worker, \Symfony\Component\HttpFoundation\Request $request): Response
     {
-        if (!$worker || $task->getWorker() !== $worker) {
+        if (!$worker || ($task->getWorker() !== null && $task->getWorker() !== $worker)) {
             return new JsonResponse(['error' => 'Unauthorized'], Response::HTTP_FORBIDDEN);
         }
 
+        $payload = json_decode($request->getContent(), true) ?: null;
+
         $task->setStatus('DONE');
+        $task->setDoneAt(new \DateTimeImmutable());
+        $task->setWorker($worker);
+        $task->setExecutionPayload($payload);
 
         $this->scoringService->addPointsForTask($task);
 
@@ -107,7 +121,7 @@ class WorkerController extends AbstractController
             entityType: 'task_instance',
             entityId: (string) $task->getId(),
             eventType: 'task.done_by_worker',
-            payload: ['worker_id' => $worker->getId()]
+            payload: ['worker_id' => $worker->getId(), 'execution_payload' => $payload]
         );
 
         return new JsonResponse(['success' => true, 'status' => 'DONE']);

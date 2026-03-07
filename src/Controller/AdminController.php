@@ -83,6 +83,9 @@ class AdminController extends AbstractController
             'worker_id' => $t->getWorker()?->getId(),
             'worker_name' => $t->getWorker()?->getShortName(),
             'doneAt' => $t->getDoneAt()?->format('Y-m-d H:i:s'),
+            'category' => $t->getTemplate()?->getCategory() ?? 'Inne',
+            'widgetType' => $t->getTemplate()?->getWidgetType(),
+            'widgetSchema' => $t->getTemplate()?->getWidgetSchema(),
         ], $tasks);
 
         // 1.2 Pending Tasks from previous weeks
@@ -108,6 +111,9 @@ class AdminController extends AbstractController
             'weekNumber' => $t->getWeek()->getWeekNumber(),
             'year' => $t->getWeek()->getYear(),
             'status' => $t->getStatus(),
+            'category' => $t->getTemplate()?->getCategory() ?? 'Inne',
+            'widgetType' => $t->getTemplate()?->getWidgetType(),
+            'widgetSchema' => $t->getTemplate()?->getWidgetSchema(),
         ], $pendingTasks);
 
         // 2. Workers

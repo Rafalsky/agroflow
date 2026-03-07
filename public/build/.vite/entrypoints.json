@@ -3,22 +3,22 @@
   "entryPoints": {
     "app": {
       "css": [
-        "/build/assets/app-DLp0374r.css"
+        "/build/assets/app-DkYv8XXh.css"
       ],
       "dynamic": [],
       "js": [
-        "/build/assets/app-ynM0tIAf.js"
+        "/build/assets/app-B4-9MZJc.js"
       ],
       "legacy": false,
       "preload": []
     },
     "admin": {
       "css": [
-        "/build/assets/admin-DCUdRLs6.css"
+        "/build/assets/admin-CbrPg_wz.css"
       ],
       "dynamic": [],
       "js": [
-        "/build/assets/admin-DLrVNUlB.js"
+        "/build/assets/admin-D-qRWFha.js"
       ],
       "legacy": false,
       "preload": []

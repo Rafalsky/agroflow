@@ -1,0 +1,23 @@
+default:
+  suites:
+    e2e:
+      paths:
+        - '%paths.base%/tests/e2e/features'
+      contexts:
+        - App\Tests\E2E\Behat\FeatureContext
+      
+  extensions:
+    FriendsOfBehat\SymfonyExtension: ~
+    Robertfausk\Behat\PantherExtension: ~
+    Behat\MinkExtension:
+      base_url: "https://127.0.0.1:8000/" # Make sure the application is available here
+      default_session: panther
+      javascript_session: panther
+      panther:
+        options:
+          browser: 'chrome'
+          webServerDir: '%paths.base%/public'
+          # you can configure Chrome options here if needed, like headless, etc.
+          # for example:
+          # client_options:
+          #   request_options: ...
