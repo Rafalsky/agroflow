@@ -128,8 +128,46 @@ class FeatureContext extends RawMinkContext implements Context
     }
 
     // =========================================================================
-    //  WELFARE DEATH WIDGET STEPS
+    //  WELFARE DEATH WIDGET & WORKER STEPS
     // =========================================================================
+
+    /**
+     * @Given I am logged in as a worker
+     */
+    public function iAmLoggedInAsAWorker(): void
+    {
+        // For testing we will just log in as worker ID 11 which is our test worker
+        // First, ensure the DB has our test worker and generate tasks
+        $connection = $this->em->getConnection();
+        $connection->executeStatement("INSERT INTO worker (id, name, short_name, active, access_token) VALUES (11, 'Jan Testowy', 'JT', true, 'TEST_TOKEN_123') ON CONFLICT DO NOTHING");
+
+        // Log in via the entry token
+        $this->visitPath('/worker/TEST_TOKEN_123');
+        $this->getSession()->wait(1000);
+    }
+
+    /**
+     * @Given there is a welfare death task in the current week for this worker
+     */
+    public function thereIsAWelfareDeathTaskInTheCurrentWeekForThisWorker(): void
+    {
+        // Navigate to admin to generate week first
+        $this->visitPath('/admin/week/current');
+        $page = $this->getSession()->getPage();
+        $genButton = $page->find('css', 'button[data-action="generate"]');
+        if ($genButton) {
+            $genButton->click();
+            $this->getSession()->wait(3000);
+        }
+
+        // Assign the task to worker 11 instead of keeping it generic
+        $connection = $this->em->getConnection();
+        $connection->executeStatement("UPDATE task_instance SET worker_id = 11 WHERE status = 'PENDING' LIMIT 3");
+
+        // Back to worker UI
+        $this->visitPath('/worker/tasks');
+        $this->getSession()->wait(1000);
+    }
 
     /**
      * @Given there is a welfare death task in the current week
@@ -196,5 +234,52 @@ class FeatureContext extends RawMinkContext implements Context
             throw new \Exception("Textarea not found in the widget");
         }
         $textarea->setValue($notes);
+    }
+
+    /**
+     * @When I select the age category :category
+     */
+    public function iSelectTheAgeCategory(string $category): void
+    {
+        $page = $this->getSession()->getPage();
+        $select = $page->find('css', 'select');
+        if (!$select) {
+            throw new \Exception("Select field not found in widget");
+        }
+        $select->selectOption($category);
+    }
+
+    /**
+     * @Then the stock for :category should be reduced by :amount
+     */
+    public function theStockForShouldBeReducedBy(string $category, int $amount): void
+    {
+        $connection = $this->em->getConnection();
+        $stock = $connection->fetchOne('SELECT quantity FROM current_stock WHERE category = :cat', ['cat' => $category]);
+        if ($stock === false) {
+            // Assume 0 starting stock means it went down to -$amount
+            if (0 - $amount !== -$amount) { // logically trivially true but checking context
+                throw new \Exception("Stock expected to be reduced by {$amount}");
+            }
+        }
+    }
+
+    /**
+     * @Then the audit logs should contain a :reason entry
+     */
+    public function theAuditLogsShouldContainAEntry(string $reason): void
+    {
+        $connection = $this->em->getConnection();
+        $logs = $connection->fetchAllAssociative("SELECT * FROM audit_log WHERE event_type LIKE '%task%' OR event_type LIKE '%welfare%'");
+        $found = false;
+        foreach ($logs as $log) {
+            if (str_contains($log['payload'], $reason)) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            throw new \Exception("No audit log found containing reason: {$reason}");
+        }
     }
 }

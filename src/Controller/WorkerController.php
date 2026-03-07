@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Domain\Audit\Service\AuditLogger;
 use App\Domain\Scoring\Repository\ScoreLedgerRepository;
 use App\Domain\Scoring\Service\ScoringService;
+use App\Domain\Welfare\Service\WelfareService;
 use App\Domain\WorkCycle\Entity\TaskInstance;
 use App\Domain\WorkCycle\Entity\Worker;
 use App\Domain\WorkCycle\Repository\TaskInstanceRepository;
@@ -24,7 +25,8 @@ class WorkerController extends AbstractController
         private TaskInstanceRepository $taskRepository,
         private AuditLogger $auditLogger,
         private ScoringService $scoringService,
-        private ScoreLedgerRepository $scoreRepository
+        private ScoreLedgerRepository $scoreRepository,
+        private WelfareService $welfareService
     ) {
     }
 
@@ -112,6 +114,22 @@ class WorkerController extends AbstractController
         $task->setDoneAt(new \DateTimeImmutable());
         $task->setWorker($worker);
         $task->setExecutionPayload($payload);
+
+        // PIWET WelfareDeath processing
+        if ($payload && $task->getTemplate()?->getWidgetType() === 'welfare_death') {
+            $amount = (int) ($payload['amount'] ?? 0);
+            if ($amount > 0) {
+                $category = $payload['category'] ?? 'fatteners';
+                $notes = $payload['notes'] ?? 'Zgłoszono podczas obchodu';
+                $this->welfareService->applyChange(
+                    category: $category,
+                    delta: -$amount,
+                    reason: 'DEATH',
+                    note: $notes,
+                    worker: $worker
+                );
+            }
+        }
 
         $this->scoringService->addPointsForTask($task);
 
